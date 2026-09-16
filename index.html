@@ -1,0 +1,724 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, viewport-fit=cover">
+<title>TPAC 예상문제 시험장</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@500;700&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#F4F1E9;
+    --surface:#FFFFFF;
+    --surface-2:#ECE7DA;
+    --ink:#1C2331;
+    --ink-soft:#5B6172;
+    --navy:#1B2A44;
+    --navy-2:#26385C;
+    --brass:#A8792E;
+    --brass-soft:#E8D9B5;
+    --good:#2F6D4F;
+    --good-bg:#E4F1E9;
+    --bad:#A13F35;
+    --bad-bg:#F6E4E1;
+    --extreme:#6B2545;
+    --extreme-bg:#F1E1E8;
+    --line:#D8D2C1;
+    --radius:14px;
+    --shadow:0 1px 2px rgba(28,35,49,.06), 0 8px 24px rgba(28,35,49,.08);
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#12161F; --surface:#1B212E; --surface-2:#232B3A;
+      --ink:#EDEEF2; --ink-soft:#9AA1B3;
+      --navy:#26385C; --navy-2:#33477A;
+      --brass:#D8B36A; --brass-soft:#3A3423;
+      --good:#5FBE8C; --good-bg:#1B2E24;
+      --bad:#E58177; --bad-bg:#332120;
+      --extreme:#D98CB0; --extreme-bg:#33202B;
+      --line:#323A4B;
+      --shadow:0 1px 2px rgba(0,0,0,.3), 0 8px 24px rgba(0,0,0,.4);
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#12161F; --surface:#1B212E; --surface-2:#232B3A;
+    --ink:#EDEEF2; --ink-soft:#9AA1B3;
+    --navy:#26385C; --navy-2:#33477A;
+    --brass:#D8B36A; --brass-soft:#3A3423;
+    --good:#5FBE8C; --good-bg:#1B2E24;
+    --bad:#E58177; --bad-bg:#332120;
+    --extreme:#D98CB0; --extreme-bg:#33202B;
+    --line:#323A4B;
+    --shadow:0 1px 2px rgba(0,0,0,.3), 0 8px 24px rgba(0,0,0,.4);
+  }
+
+  *{box-sizing:border-box; -webkit-tap-highlight-color:transparent;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--bg); color:var(--ink);
+    font-family:'Noto Sans KR', sans-serif;
+    min-height:100vh; display:flex; justify-content:center;
+    padding:22px 12px calc(48px + env(safe-area-inset-bottom));
+    touch-action:manipulation;
+  }
+  .wrap{width:100%;max-width:460px;}
+
+  header.top{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:16px;padding:0 2px;}
+  header.top .brand{font-family:'Noto Serif KR', serif;font-weight:700;font-size:1.28rem;letter-spacing:-0.01em;color:var(--navy);}
+  @media (prefers-color-scheme: dark){ header.top .brand{color:var(--brass);} }
+  :root[data-theme="dark"] header.top .brand{color:var(--brass);}
+  header.top .tag{font-size:.74rem;color:var(--ink-soft);text-align:right;line-height:1.4;}
+
+  .panel{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:20px;margin-bottom:14px;}
+
+  #setup h1{font-family:'Noto Serif KR', serif;font-size:1.1rem;font-weight:700;margin:0 0 6px;line-height:1.45;}
+  #setup p.desc{font-size:.84rem;color:var(--ink-soft);line-height:1.6;margin:0 0 18px;}
+  .filter-row{display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap;}
+  .filter-btn{flex:1;min-width:80px;padding:12px 6px;border-radius:10px;border:1.5px solid var(--line);background:var(--surface-2);color:var(--ink);font-size:.84rem;font-weight:700;font-family:inherit;cursor:pointer;}
+  .filter-btn.active{border-color:var(--navy);background:var(--navy);color:#fff;}
+  @media (prefers-color-scheme: dark){ .filter-btn.active{background:var(--brass);color:#1B212E;border-color:var(--brass);} }
+  :root[data-theme="dark"] .filter-btn.active{background:var(--brass);color:#1B212E;border-color:var(--brass);}
+  .filter-btn.disabled{opacity:.4;pointer-events:none;}
+
+  .diff-row{display:flex;gap:7px;margin-bottom:20px;flex-wrap:wrap;}
+  .dchip{flex:1;min-width:64px;padding:9px 4px;border-radius:9px;border:1.5px solid var(--line);background:var(--surface);font-size:.76rem;font-weight:700;text-align:center;cursor:pointer;color:var(--ink-soft);}
+  .dchip.active{color:#fff;}
+  .dchip[data-d="하"].active{background:var(--good);border-color:var(--good);}
+  .dchip[data-d="중"].active{background:var(--brass);border-color:var(--brass);}
+  .dchip[data-d="상"].active{background:var(--bad);border-color:var(--bad);}
+  .dchip[data-d="최상"].active{background:var(--extreme);border-color:var(--extreme);}
+
+  .start-btn{width:100%;padding:16px;border-radius:10px;border:none;background:var(--brass);color:#fff;font-family:'Noto Serif KR', serif;font-weight:700;font-size:1.02rem;cursor:pointer;}
+  @media (prefers-color-scheme: dark){ .start-btn{color:#1B212E;} }
+  :root[data-theme="dark"] .start-btn{color:#1B212E;}
+  .start-btn:active{transform:translateY(1px);}
+
+  .stat-row{display:flex;gap:9px;margin-top:16px;}
+  .stat-box{flex:1;border:1px solid var(--line);border-radius:10px;padding:10px 8px;text-align:center;background:var(--surface-2);}
+  .stat-box .num{font-family:'Noto Serif KR',serif;font-size:1.2rem;font-weight:700;color:var(--navy);}
+  @media (prefers-color-scheme: dark){ .stat-box .num{color:var(--brass);} }
+  :root[data-theme="dark"] .stat-box .num{color:var(--brass);}
+  .stat-box .lbl{font-size:.68rem;color:var(--ink-soft);margin-top:2px;}
+
+  .caveat{margin-top:16px;padding:12px 13px;border-radius:10px;background:var(--surface-2);border-left:3px solid var(--brass);font-size:.75rem;line-height:1.6;color:var(--ink-soft);}
+
+  #quiz{display:none;}
+  .progress-line{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;font-size:.78rem;color:var(--ink-soft);padding:0 2px;}
+  .progress-track{height:5px;border-radius:3px;background:var(--surface-2);overflow:hidden;margin-bottom:14px;}
+  .progress-fill{height:100%;background:var(--brass);width:0%;transition:width .25s ease;}
+
+  .badge-row{display:flex;gap:7px;align-items:center;margin-bottom:12px;flex-wrap:wrap;}
+  .badge{font-size:.7rem;font-weight:700;padding:4px 10px;border-radius:999px;border:1px solid var(--line);}
+  .badge.subject{background:var(--navy);color:#fff;border-color:var(--navy);}
+  @media (prefers-color-scheme: dark){ .badge.subject{background:var(--brass);color:#1B212E;border-color:var(--brass);} }
+  :root[data-theme="dark"] .badge.subject{background:var(--brass);color:#1B212E;border-color:var(--brass);}
+  .badge.diff-하{color:var(--good);border-color:var(--good);}
+  .badge.diff-중{color:var(--brass);border-color:var(--brass);}
+  .badge.diff-상{color:var(--bad);border-color:var(--bad);}
+  .badge.diff-최상{color:var(--extreme);border-color:var(--extreme);background:var(--extreme-bg);}
+  .badge.type{color:var(--ink-soft);}
+
+  #qtext{font-family:'Noto Serif KR', serif;font-size:1.02rem;font-weight:500;line-height:1.62;margin:0 0 18px;}
+
+  .opt{display:flex;align-items:flex-start;gap:10px;width:100%;text-align:left;padding:14px;margin-bottom:9px;border-radius:11px;border:1.5px solid var(--line);background:var(--surface);color:var(--ink);font-family:'Noto Sans KR', sans-serif;font-size:.9rem;line-height:1.5;cursor:pointer;min-height:48px;}
+  .opt .num{flex:none;width:23px;height:23px;border-radius:50%;border:1.5px solid var(--line);display:flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:700;color:var(--ink-soft);}
+  .opt.picked{border-color:var(--brass);background:var(--brass-soft);}
+  .opt.picked .num{background:var(--brass);border-color:var(--brass);color:#fff;}
+  .opt.correct{background:var(--good-bg);border-color:var(--good);}
+  .opt.correct .num{background:var(--good);border-color:var(--good);color:#fff;}
+  .opt.wrong{background:var(--bad-bg);border-color:var(--bad);}
+  .opt.wrong .num{background:var(--bad);border-color:var(--bad);color:#fff;}
+  .opt.disabled{pointer-events:none;}
+  .opt.dim{opacity:.5;}
+
+  .confirm-btn{display:none;width:100%;padding:13px;margin:2px 0 8px;border-radius:10px;border:1.5px solid var(--navy);background:transparent;color:var(--navy);font-weight:700;font-size:.9rem;cursor:pointer;}
+  @media (prefers-color-scheme: dark){ .confirm-btn{color:var(--brass);border-color:var(--brass);} }
+  :root[data-theme="dark"] .confirm-btn{color:var(--brass);border-color:var(--brass);}
+
+  #explain{display:none;margin-top:12px;padding:14px 16px;border-radius:11px;background:var(--surface-2);border-left:3px solid var(--brass);font-size:.83rem;line-height:1.65;color:var(--ink);}
+  #explain .exp-title{font-weight:700;color:var(--brass);margin-bottom:4px;font-size:.76rem;}
+
+  .next-btn{display:none;width:100%;margin-top:14px;padding:15px;border-radius:10px;border:none;background:var(--navy);color:#fff;font-weight:700;font-size:.95rem;font-family:'Noto Serif KR', serif;cursor:pointer;}
+  @media (prefers-color-scheme: dark){ .next-btn{background:var(--brass);color:#1B212E;} }
+  :root[data-theme="dark"] .next-btn{background:var(--brass);color:#1B212E;}
+
+  #result{display:none;text-align:center;}
+  #result .score-big{font-family:'Noto Serif KR', serif;font-size:2.5rem;font-weight:700;color:var(--navy);margin:6px 0 2px;}
+  @media (prefers-color-scheme: dark){ #result .score-big{color:var(--brass);} }
+  :root[data-theme="dark"] #result .score-big{color:var(--brass);}
+  #result .score-sub{color:var(--ink-soft);font-size:.85rem;margin-bottom:18px;}
+  .breakdown{display:flex;gap:8px;margin-bottom:10px;flex-wrap:wrap;}
+  .breakdown .bb{flex:1;min-width:70px;border:1px solid var(--line);border-radius:10px;padding:10px 6px;background:var(--surface-2);}
+  .breakdown .bb .t{font-size:.7rem;color:var(--ink-soft);margin-bottom:3px;}
+  .breakdown .bb .v{font-family:'Noto Serif KR',serif;font-weight:700;font-size:1.02rem;}
+  .retry-btn{width:100%;padding:15px;margin-top:14px;border-radius:10px;border:1.5px solid var(--navy);background:transparent;color:var(--navy);font-weight:700;font-family:'Noto Serif KR', serif;cursor:pointer;}
+  @media (prefers-color-scheme: dark){ .retry-btn{color:var(--brass);border-color:var(--brass);} }
+  :root[data-theme="dark"] .retry-btn{color:var(--brass);border-color:var(--brass);}
+
+  footer.note{text-align:center;font-size:.7rem;color:var(--ink-soft);margin-top:4px;line-height:1.6;}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="top">
+    <div class="brand">TPAC 시험장</div>
+    <div class="tag">제도150·실무150<br>총 300문항 완료 🎉</div>
+  </header>
+
+  <div id="setup" class="panel">
+    <h1>TPAC 예상문제 300문항 완성</h1>
+    <p class="desc">제도 150 + 실무 150, 5지선다 단일정답 + 모두 고르시오(복수정답) 혼합, 난이도 하/중/상/최상 포함. 터치하면 정답·해설이 바로 표시됩니다.</p>
+
+    <div class="filter-row" id="filterRow">
+      <button class="filter-btn active" data-f="all">전체 300</button>
+      <button class="filter-btn" data-f="제도">제도 150</button>
+      <button class="filter-btn" data-f="실무">실무 150</button>
+    </div>
+
+    <button class="start-btn" id="startBtn">시험 시작</button>
+
+    <div class="stat-row">
+      <div class="stat-box"><div class="num" id="cntSingle">-</div><div class="lbl">단일정답</div></div>
+      <div class="stat-box"><div class="num" id="cntMulti">-</div><div class="lbl">모두고르기</div></div>
+      <div class="stat-box"><div class="num" id="cntExtreme">-</div><div class="lbl">최상난이도</div></div>
+    </div>
+
+    <div class="caveat">⚠ 숫자·금액·조항 번호가 포함된 문항은 관련 법령·시행령 개정으로 수치가 바뀔 수 있습니다. 실제 시험 전 최신 교재·강의자료의 수치와 반드시 한 번 더 대조해 주세요.</div>
+  </div>
+
+  <div id="quiz" class="panel">
+    <div class="progress-line">
+      <span id="progText">문제 1 / 300</span>
+      <span id="scoreText">정답 0</span>
+    </div>
+    <div class="progress-track"><div class="progress-fill" id="progFill"></div></div>
+
+    <div class="badge-row">
+      <span class="badge subject" id="subjBadge">제도</span>
+      <span class="badge" id="diffBadge">하</span>
+      <span class="badge type" id="typeBadge"></span>
+    </div>
+
+    <p id="qtext"></p>
+    <div id="optList"></div>
+    <button class="confirm-btn" id="confirmBtn">정답 확인</button>
+
+    <div id="explain">
+      <div class="exp-title">해설</div>
+      <div id="explainText"></div>
+    </div>
+
+    <button class="next-btn" id="nextBtn">다음 문제</button>
+  </div>
+
+  <div id="result" class="panel">
+    <div style="font-size:.85rem;color:var(--ink-soft);">최종 결과</div>
+    <div class="score-big" id="finalScore">0 / 300</div>
+    <div class="score-sub" id="finalPct">정답률 0%</div>
+    <div class="breakdown">
+      <div class="bb"><div class="t">하</div><div class="v" id="bd하">0/0</div></div>
+      <div class="bb"><div class="t">중</div><div class="v" id="bd중">0/0</div></div>
+      <div class="bb"><div class="t">상</div><div class="v" id="bd상">0/0</div></div>
+      <div class="bb"><div class="t">최상</div><div class="v" id="bd최상">0/0</div></div>
+    </div>
+    <button class="retry-btn" id="retryBtn">다시 풀기</button>
+  </div>
+
+  <footer class="note">한국금융연수원 TPAC 공식 기출과 무관한 자체 제작 예상문제입니다.<br>숫자·금액·조항 관련 문항은 최신 교재로 꼭 한 번 더 확인해 주세요.</footer>
+</div>
+
+<script>
+const QUESTIONS = [
+{subject:'제도',diff:'하',type:'single',q:'FATF가 설립된 연도는?',opts:['1988년','1989년','1990년','1995년','2001년'],a:1,exp:'FATF(Financial Action Task Force)는 1989년 파리 G7 정상회의를 계기로 설립되었습니다.'},
+{subject:'제도',diff:'하',type:'single',q:'FATF의 정식 명칭으로 옳은 것은?',opts:['Financial Action Task Force','Foreign Asset Tracking Force','Fraud Action Task Force','Finance Anti-laundering Team','Federal AML Task Force'],a:0,exp:'FATF는 Financial Action Task Force(국제자금세탁방지기구)의 약자입니다.'},
+{subject:'제도',diff:'하',type:'single',q:'국내 「특정 금융거래정보의 보고 및 이용 등에 관한 법률」(특금법)이 제정된 연도는?',opts:['1999년','2000년','2001년','2003년','2005년'],a:2,exp:'특금법은 2001년 9월 제정되었습니다(법률 제6516호).'},
+{subject:'제도',diff:'중',type:'single',q:'특정금융거래정보법의 목적으로 가장 적절한 것은?',opts:['금융거래를 이용한 자금세탁행위와 공중협박자금조달행위 규제에 필요한 사항을 규정','금융회사의 이익을 극대화','고객의 투자수익률을 관리','금융상품 개발을 촉진','외환보유고를 관리'],a:0,exp:'제1조는 금융거래 등을 이용한 자금세탁행위와 공중협박자금조달행위 규제에 필요한 사항 규정을 목적으로 명시하고 있습니다.'},
+{subject:'제도',diff:'상',type:'multi',q:'다음 중 국내 자금세탁방지 관련 3대 법률에 해당하는 것을 모두 고르시오.',opts:['특정금융거래정보법','범죄수익은닉의 규제 및 처벌 등에 관한 법률','공중협박자금조달금지법','전자금융거래법','자본시장법'],a:[0,1,2],exp:'특금법, 범죄수익은닉규제법, 공중협박자금조달금지법 3개 법률이 국내 자금세탁방지 체계의 핵심 법률로 꼽힙니다.'},
+{subject:'제도',diff:'하',type:'single',q:'자금세탁의 일반적 3단계 진행 순서로 옳은 것은?',opts:['예치(Placement)→은폐(Layering)→합법화(Integration)','은폐→예치→합법화','합법화→예치→은폐','예치→합법화→은폐','은폐→합법화→예치'],a:0,exp:'예치→은폐→합법화 순서로 진행되는 것이 일반적인 자금세탁 3단계 모델입니다.'},
+{subject:'제도',diff:'중',type:'single',q:'1988년 채택되어 마약류 불법거래를 규율하며, 자금세탁을 국제적으로 범죄화한 초기 협약으로 평가되는 UN협약은?',opts:['비엔나협약','팔레르모협약','메리다협약','제네바협약','교토협약'],a:0,exp:'1988년 UN 비엔나협약(마약 및 향정신성물질 불법거래 방지에 관한 협약)이 자금세탁을 국제범죄로 다룬 초기 협약으로 평가됩니다.'},
+{subject:'제도',diff:'중',type:'single',q:'초국가조직범죄를 규율하며 2000년 채택된 UN협약은?',opts:['비엔나협약','팔레르모협약','메리다협약','바젤협약','교토협약'],a:1,exp:'팔레르모협약(UN 국제조직범죄방지협약)은 2000년 채택되었습니다.'},
+{subject:'제도',diff:'중',type:'single',q:'UN반부패협약(메리다협약)이 채택된 연도는?',opts:['2000년','2001년','2003년','2005년','2008년'],a:2,exp:'메리다협약(UN Convention against Corruption)은 2003년 채택되었습니다.'},
+{subject:'제도',diff:'최상',type:'single',q:'다음 국제협약을 채택된 시기가 빠른 순서대로 바르게 나열한 것은?',opts:['비엔나협약 → 팔레르모협약 → 메리다협약','팔레르모협약 → 비엔나협약 → 메리다협약','메리다협약 → 비엔나협약 → 팔레르모협약','비엔나협약 → 메리다협약 → 팔레르모협약','팔레르모협약 → 메리다협약 → 비엔나협약'],a:0,exp:'비엔나협약(1988) → 팔레르모협약(2000) → 메리다협약(2003) 순입니다.'},
+{subject:'제도',diff:'하',type:'single',q:'CDD의 정식 영문 명칭으로 옳은 것은?',opts:['Customer Due Diligence','Credit Default Diligence','Client Data Disclosure','Currency Deposit Declaration','Compliance Data Division'],a:0,exp:'CDD는 Customer Due Diligence(고객확인제도)의 약자입니다.'},
+{subject:'제도',diff:'중',type:'single',q:'특금법상 원화 기준 일회성 금융거래 고객확인(CDD) 대상 금액은? (⚠ 시행령 개정으로 변동 가능, 최신 자료 대조 필요)',opts:['1천만원 이상','1,500만원 이상','2천만원 이상','3천만원 이상','5천만원 이상'],a:2,exp:'원칙적으로 원화 2천만원 이상(외화는 1만불 이상)의 일회성 금융거래자는 고객확인 대상입니다. 시행령 개정 이력이 있으므로 최신 수치를 교재로 재확인하세요.'},
+{subject:'제도',diff:'중',type:'single',q:'위 문항의 일회성 금융거래 외화 기준 금액은? (⚠ 최신 자료 대조 필요)',opts:['5천불 이상','1만불 이상','2만불 이상','5만불 이상','10만불 이상'],a:1,exp:'외화 기준으로는 통상 1만불 이상이 고객확인 대상 기준으로 다뤄집니다.'},
+{subject:'제도',diff:'중',type:'single',q:'고액현금거래보고(CTR)의 1거래일 기준 보고 금액은? (⚠ 최신 자료 대조 필요)',opts:['500만원 이상','1천만원 이상','2천만원 이상','3천만원 이상','5천만원 이상'],a:1,exp:'동일인이 1거래일 동안 현금으로 1천만원 이상 입금 또는 출금하면 CTR 보고 대상입니다. 과거 한시적으로 3천만원·5천만원 기준이 적용된 시기도 있었으니 개정 연혁에 유의하세요.'},
+{subject:'제도',diff:'상',type:'single',q:'카지노사업자의 영업장에서 이루어지는 칩거래와 관련해 적용되는 고객확인 기준금액은? (⚠ 최신 자료 대조 필요)',opts:['100만원 이상','300만원 이상','500만원 이상','1천만원 이상','2천만원 이상'],a:1,exp:'카지노사업자의 칩거래는 300만원 이상이 고객확인 기준금액으로 다뤄지는 경우가 많습니다. 업권별 특례이므로 정확한 수치는 최신 감독규정으로 확인하세요.'},
+{subject:'제도',diff:'상',type:'multi',q:'특금법상 고객확인(CDD)을 실시해야 하는 경우를 모두 고르시오.',opts:['신규 계좌개설','기준금액 이상의 일회성 금융거래','자금세탁 의심 거래','기존 고객의 단순 비밀번호 변경','단순 계좌잔액 조회'],a:[0,1,2],exp:'신규 계좌개설, 기준금액 이상 일회성 금융거래, 자금세탁 의심 거래 3가지가 CDD 이행 사유의 대표적 유형입니다.'},
+{subject:'제도',diff:'중',type:'single',q:'강화된 고객확인(EDD)의 근거 조항 위치로 옳은 것은?',opts:['특금법 제5조의2 제1항 제1호','특금법 제5조의2 제1항 제2호','특금법 제4조','특금법 제9조','특금법 제10조'],a:1,exp:'특금법 제5조의2 제1항 제1호는 일반 CDD(실명·주소·연락처 확인), 제2호는 고위험고객 대상 EDD를 규정합니다.'},
+{subject:'제도',diff:'하',type:'single',q:'국내 금융실명제가 도입된 연도는?',opts:['1988년','1993년','1997년','2001년','2005년'],a:1,exp:'금융실명제는 1993년 금융실명거래에 관한 긴급명령으로 도입되었습니다.'},
+{subject:'제도',diff:'중',type:'single',q:'국내 자금세탁방지 주무기관인 금융정보분석원(KoFIU) 설립의 직접적 근거 법률은?',opts:['특정금융거래정보법','금융위원회법','은행법','자본시장법','한국은행법'],a:0,exp:'금융정보분석원은 특정금융거래정보법에 근거해 설립·운영되는 기관입니다.'},
+{subject:'제도',diff:'중',type:'single',q:'금융정보분석원(KoFIU)의 소속으로 옳은 것은?',opts:['금융위원회 소속','기획재정부 소속','국무총리 직속 독립기관','법무부 소속','한국은행 소속'],a:0,exp:'KoFIU는 금융위원회 소속 기관입니다.'},
+{subject:'제도',diff:'중',type:'single',q:'FATF 권고사항의 총 개수는?',opts:['30개','35개','40개','45개','50개'],a:2,exp:'FATF는 40개 권고사항 체계로 국제기준을 제시하고 있습니다.'},
+{subject:'제도',diff:'중',type:'single',q:'FATF가 각국의 자금세탁방지체계 이행 수준을 심사하는 제도를 무엇이라 하는가?',opts:['상호평가(Mutual Evaluation)','자체평가','국가감사','국제감사','자율점검'],a:0,exp:'FATF 및 지역기구(APG 등)가 회원국을 대상으로 상호평가를 실시해 이행 수준을 심사합니다.'},
+{subject:'제도',diff:'하',type:'single',q:'자금세탁방지 관련 각국 FIU(금융정보분석기구) 간 국제 정보공유 협의체는?',opts:['Egmont Group','Wolfsberg Group','Basel Committee','IOSCO','IAIS'],a:0,exp:'Egmont Group은 각국 FIU들이 정보를 교환하고 협력하는 국제 협의체입니다.'},
+{subject:'제도',diff:'상',type:'single',q:'Wolfsberg Group에 대한 설명으로 가장 적절한 것은?',opts:['국제 은행들이 참여하는 민간 AML 협의체','UN 산하 국제기구','각국 정부 감독기관들의 공식 협의체','FATF의 공식 하부 조직','국제형사경찰기구(인터폴)'],a:0,exp:'Wolfsberg Group은 주요 국제 은행들이 자율적으로 결성한 민간 AML 협의체로, 표준 지침을 발표해왔습니다.'},
+{subject:'제도',diff:'중',type:'single',q:'자금세탁의 3단계 중 자금출처를 복잡하게 만들어 추적을 어렵게 하는 단계는?',opts:['Placement','Layering','Integration','Structuring','Smurfing'],a:1,exp:'Layering(은폐) 단계는 다수의 거래를 통해 자금출처를 복잡하게 만들어 추적을 어렵게 합니다.'},
+{subject:'제도',diff:'하',type:'single',q:'위험기반접근법(RBA)에서 일반적으로 고려하지 않는 요소는?',opts:['고객위험','상품·서비스위험','국가·지역위험','거래(전달채널)위험','임직원 개인 취미'],a:4,exp:'RBA는 고객·상품·국가·거래채널 등 자금세탁 관련성이 있는 위험요소를 고려하며, 임직원 개인 취미와 같은 요소는 해당하지 않습니다.'},
+{subject:'제도',diff:'중',type:'multi',q:'위험기반접근법(RBA)에서 일반적으로 고려하는 위험요소를 모두 고르시오.',opts:['고객위험','상품·서비스위험','국가·지역위험','거래(전달채널)위험','고객의 정치 성향'],a:[0,1,2,3],exp:'고객·상품·국가·거래채널 위험이 RBA의 대표적 4대 고려요소로 다뤄집니다.'},
+{subject:'제도',diff:'상',type:'single',q:'PEP(정치적 주요인물)에 대한 설명으로 옳은 것은?',opts:['PEP는 거래가 전면 금지되는 대상이다','PEP는 일반 고객과 동일하게 취급된다','PEP는 고위험군으로 분류되어 EDD 대상이 될 수 있다','PEP는 국내 정치인만 해당한다','PEP는 법적 근거 없이 임의로 판단한다'],a:2,exp:'PEP는 지위 남용에 따른 위험이 높다고 보아 EDD 대상으로 분류될 수 있으며, 거래 자체가 자동 금지되는 것은 아닙니다.'},
+{subject:'제도',diff:'하',type:'single',q:'특금법상 보고대상기관인 \'금융회사등\'에 해당하지 않는 것은?',opts:['은행','보험회사','카지노사업자','증권회사','일반 소매업체(편의점)'],a:4,exp:'은행·보험·증권·카지노사업자 등은 특금법상 금융회사등에 포함되지만, 일반 소매업체는 포함되지 않습니다.'},
+{subject:'제도',diff:'중',type:'single',q:'금융회사등이 의심거래보고·고액현금보고 등을 위한 내부 조치를 하지 않은 경우 부과되는 과태료는? (⚠ 최신 자료 대조 필요)',opts:['1천만원','3천만원','6천만원','1억원','1천800만원'],a:2,exp:'관련 조치를 하지 않은 경우 6천만원의 과태료가 부과되는 것으로 규정된 사례가 있습니다. 개정 여부는 최신 자료로 확인하세요.'},
+{subject:'제도',diff:'최상',type:'single',q:'의심거래보고·고객확인 등 관련 금융거래 자료를 거래종료 후 5년간 보존하지 않은 경우 부과되는 과태료는? (⚠ 최신 자료 대조 필요)',opts:['1천만원','1천800만원','3천만원','6천만원','1억원'],a:1,exp:'관련 자료 미보존시 1천800만원의 과태료가 부과되는 것으로 규정된 사례가 있습니다.'},
+{subject:'제도',diff:'중',type:'single',q:'특금법상 금융거래 관련 자료·정보의 일반적 보존기간은?',opts:['3년','5년','7년','10년','영구'],a:1,exp:'금융거래관계 종료 후 5년간 관련 자료를 보존해야 하는 것이 원칙입니다.'},
+{subject:'제도',diff:'하',type:'single',q:'「범죄수익은닉의 규제 및 처벌 등에 관한 법률」이 주로 규율하는 대상은?',opts:['범죄수익의 취득·처분사실 가장 및 은닉행위 처벌','테러자금조달 행위','카지노 영업허가','외국환거래 신고','신용정보 보호'],a:0,exp:'범죄수익은닉규제법은 범죄수익의 취득·처분사실을 가장하거나 은닉하는 행위 등을 처벌 대상으로 합니다.'},
+{subject:'제도',diff:'하',type:'single',q:'공중협박자금조달금지법이 규율하는 대상은?',opts:['테러자금조달 행위','일반 자금세탁행위','조세포탈','뇌물수수','불법도박'],a:0,exp:'공중협박자금조달금지법은 테러자금조달 행위를 규율 대상으로 합니다.'},
+{subject:'제도',diff:'중',type:'single',q:'국내 자금세탁방지 3대 법률 중 금융회사의 보고·확인의무 등 예방적 조치를 중심으로 규정한 법률은?',opts:['특정금융거래정보법','범죄수익은닉규제법','공중협박자금조달금지법','형법','특정경제범죄가중처벌법'],a:0,exp:'특금법은 금융회사등의 보고·확인의무 등 예방적 조치를 중심으로 규정하고 있습니다.'},
+{subject:'제도',diff:'상',type:'single',q:'다음 중 법률과 그 주된 성격을 옳게 짝지은 것은?',opts:['특금법-예방적 보고·확인의무 중심 / 범죄수익은닉규제법-사후적 처벌·몰수 중심 / 공중협박자금조달금지법-테러자금조달 규율','특금법-사후적 처벌 중심 / 범죄수익은닉규제법-예방적 보고의무 중심 / 공중협박자금조달금지법-일반 자금세탁 규율','특금법-테러자금조달 규율 / 범죄수익은닉규제법-예방적 보고의무 중심 / 공중협박자금조달금지법-사후적 처벌 중심','세 법률 모두 동일하게 사후적 처벌만을 규정한다','세 법률 모두 동일하게 예방적 보고의무만을 규정한다'],a:0,exp:'특금법은 예방(보고·확인), 범죄수익은닉규제법은 사후(처벌·몰수), 공중협박자금조달금지법은 테러자금조달 규율이 각각의 핵심 성격입니다.'},
+{subject:'제도',diff:'중',type:'single',q:'금융위원회와 금융감독원의 자금세탁방지 관련 역할 구분으로 가장 적절한 것은?',opts:['금융위=정책 수립·제재 결정, 금감원=검사·조사 수행','금융위=검사만 수행, 금감원=정책만 수립','둘 다 정책 수립만 담당','둘 다 검사·조사만 담당','역할 구분이 없다'],a:0,exp:'금융위원회는 정책 수립·제재 결정을, 금융감독원은 검사·조사 등 실무를 수행하는 구조가 일반적입니다.'},
+{subject:'제도',diff:'상',type:'single',q:'가상자산사업자(VASP)가 특정금융거래정보법상 의무 대상에 포함된 계기에 대한 설명으로 가장 적절한 것은? (⚠ 정확한 시행일은 최신 자료로 재확인)',opts:['특금법 개정을 통해 가상자산사업자 관련 특례 규정(장)이 신설되었다','법 제정 당시부터 포함되어 있었다','가상자산사업자는 현재도 특금법 적용 대상이 아니다','자본시장법 개정으로 포함되었다','전자금융거래법 개정으로 포함되었다'],a:0,exp:'특금법 개정을 통해 가상자산사업자에 대한 특례 규정이 신설되면서 신고의무·CDD·STR 등 의무 대상에 포함되었습니다.'},
+{subject:'제도',diff:'중',type:'single',q:'자금세탁방지 관련 국가위험평가(NRA, National Risk Assessment)에 대한 설명으로 가장 적절한 것은?',opts:['국가 차원에서 자금세탁·테러자금조달 위험을 평가하고 대책을 검토하는 절차','개별 고객의 신용점수를 산정하는 절차','금융회사의 재무건전성을 평가하는 절차','국가 신용등급을 산정하는 절차','은행의 자기자본비율을 평가하는 절차'],a:0,exp:'NRA는 국가 차원의 자금세탁·테러자금조달 위험을 평가하고 대응 정책을 검토하는 절차입니다.'},
+{subject:'제도',diff:'하',type:'single',q:'위험기반접근법(RBA) 도입의 근본적 배경으로 가장 적절한 것은?',opts:['모든 고객·거래에 획일적 확인을 적용하는 방식의 비효율성을 개선하고 자원을 고위험 영역에 집중하기 위해','금융회사의 서류 작업을 늘리기 위해','특정 고객군을 차별하기 위해','감독기관의 업무를 단순화하기 위해','금융상품 판매를 촉진하기 위해'],a:0,exp:'RBA는 한정된 자원을 고위험 영역에 집중 배분해 효율성과 실효성을 높이려는 취지에서 도입되었습니다.'},
+{subject:'제도',diff:'중',type:'single',q:'실제소유자(Beneficial Owner) 확인 시 국제기준에서 흔히 언급되는 지분율 기준은? (⚠ 국가·법령별 상이, 최신 자료 대조 필요)',opts:['10% 이상','25% 이상','33% 이상','50% 이상','50% 초과'],a:1,exp:'국제기준상 25% 이상 지분 보유자를 실제소유자 판단의 기준선으로 흔히 언급합니다. 국내법상 정확한 수치는 교재로 재확인하세요.'},
+{subject:'제도',diff:'상',type:'single',q:'다음 중 대량살상무기(WMD) 확산금융에 대한 설명으로 가장 적절한 것은?',opts:['대량살상무기의 개발·획득·운반 등에 필요한 자금 조달과 관련된 금융행위로 FATF의 주요 규율 대상 중 하나이다','일반 소비재 무역과 동일하게 취급되는 개념이다','자금세탁방지와는 무관한 별개의 국제 이슈이다','국내법상 규율 근거가 전혀 없다','카지노 산업에만 적용되는 개념이다'],a:0,exp:'WMD 확산금융은 FATF 권고사항에서 자금세탁·테러자금조달과 함께 다뤄지는 주요 규율 대상입니다.'},
+{subject:'제도',diff:'중',type:'single',q:'다음 중 의심거래보고(STR)의 판단 기준에 대한 설명으로 가장 적절한 것은?',opts:['정해진 금액 기준이 없으며 금융회사 종사자의 합당한 근거에 따른 주관적 판단에 의존한다','1천만원 이상 거래에 한해 보고한다','2천만원 이상 거래에 한해 보고한다','외화거래에만 적용된다','카지노에는 적용되지 않는다'],a:0,exp:'STR은 정해진 금액 기준이 없고, 종사자의 합당한 근거에 따른 주관적 판단에 의존한다는 점이 특징입니다.'},
+{subject:'제도',diff:'하',type:'single',q:'금융정보분석원(KoFIU)이 수행하는 핵심 기능으로 가장 거리가 먼 것은?',opts:['의심거래정보의 수집·분석 및 법집행기관 제공','금융회사등에 대한 자금세탁방지 감독·검사','외국 FIU와의 국제협력','통화정책 결정','금융회사등의 보고의무 이행 감독'],a:3,exp:'통화정책 결정은 한국은행의 기능이며, KoFIU의 핵심 기능이 아닙니다.'},
+{subject:'제도',diff:'중',type:'single',q:'FATF 국제기준(권고사항)의 이행 방식에 대한 설명으로 가장 적절한 것은?',opts:['권고사항은 직접적 법적 구속력을 갖는 조약은 아니지만 각국이 이를 반영해 국내법을 정비하는 방식으로 이행된다','모든 회원국에 자동으로 즉시 발효되는 조약이다','이행하지 않아도 어떠한 불이익도 없다','UN 안보리 결의를 통해서만 이행된다','가입국에만 권고사항이 존재하고 비가입국에는 기준 자체가 없다'],a:0,exp:'FATF 권고사항 자체는 직접적 법적 구속력을 갖는 조약이 아니지만, 각국이 이를 반영해 입법하는 방식으로 사실상의 국제표준 역할을 합니다.'},
+{subject:'제도',diff:'상',type:'multi',q:'FATF 국제기준에서 강조하는 위험기반접근법(RBA)의 특징을 모두 고르시오.',opts:['고위험 고객·거래에 자원을 집중한다','저위험 고객에게는 간소화된 확인 절차를 적용할 수 있다','모든 고객에게 동일한 강도의 확인을 적용한다','위험평가 결과에 따라 확인·모니터링 강도를 차등화한다','위험평가는 1회만 실시하고 이후 갱신하지 않는다'],a:[0,1,3],exp:'RBA는 고위험 영역에 자원을 집중하고, 저위험 고객에게는 간소화된 절차를 적용하며, 위험도에 따라 확인·모니터링 강도를 차등화합니다. 획일적 적용이나 1회성 평가는 RBA의 취지에 반합니다.'},
+{subject:'제도',diff:'중',type:'single',q:'특금법상 정보분석심의회를 두는 목적으로 가장 적절한 것은?',opts:['금융정보분석원장이 검찰총장등에게 특정금융거래정보를 제공할 때 심의를 거치도록 하기 위해','금융회사의 인사를 심의하기 위해','금융상품 인가를 심의하기 위해','금융회사 합병을 심의하기 위해','예금자보호 한도를 심의하기 위해'],a:0,exp:'정보분석심의회는 KoFIU가 특정금융거래정보를 법집행기관 등에 제공할 때 적정성을 심의하기 위해 두는 기구입니다.'},
+{subject:'제도',diff:'하',type:'single',q:'테러자금조달(Terrorist Financing)에 대한 설명으로 가장 적절한 것은?',opts:['자금의 출처와 무관하게 테러행위나 테러조직에 자금을 제공·조달하는 행위','반드시 불법자금만을 이용한 자금세탁의 하위 개념이다','국내법상 규율 대상이 아니다','카지노에서만 발생할 수 있는 범죄다','금융회사와는 무관한 범죄다'],a:0,exp:'테러자금조달은 자금의 출처가 합법이든 불법이든, 테러행위·조직에 자금을 제공·조달하는 행위 자체를 규율한다는 점에서 일반 자금세탁과 구분됩니다.'},
+{subject:'제도',diff:'최상',type:'single',q:'A금융회사 직원은 평소 소액 거래만 하던 개인고객이 단기간에 여러 차례 보고 기준금액에 근접하지만 조금씩 못 미치는 현금 입금을 반복하는 것을 확인했다. 가장 적절한 대응은?',opts:['보고 기준금액에 미달하므로 아무 조치도 하지 않는다','기준금액 회피를 위한 분할입금(구조화, Structuring) 의심 정황일 수 있으므로 의심거래보고(STR) 여부를 검토한다','고객에게 거래를 거절하도록 강제한다','자동으로 계좌를 해지한다','수사기관에 직접 형사고발부터 진행한다'],a:1,exp:'기준금액을 회피하려는 분할거래(구조화)는 전형적인 자금세탁 의심 정황으로, 금액 미달 여부와 무관하게 STR 검토 대상이 될 수 있습니다.'},
+{subject:'제도',diff:'최상',type:'single',q:'다음 중 국내 자금세탁방지 체계의 전체 흐름을 가장 올바르게 설명한 것은?',opts:['금융회사등의 CDD·STR·CTR 이행 → 금융정보분석원(KoFIU) 수집·분석 → 법집행기관(검찰·경찰 등) 제공 → 수사·기소 등 후속조치','법집행기관이 먼저 수사한 뒤 금융회사에 결과를 통보한다','금융감독원이 모든 의심거래를 직접 수사한다','카지노사업자는 이 체계에서 완전히 제외된다','국제기구가 국내 수사를 직접 담당한다'],a:0,exp:'금융회사등의 보고 이행 → KoFIU의 수집·분석 → 법집행기관 제공 → 후속 수사·기소로 이어지는 흐름이 국내 자금세탁방지 체계의 기본 골격입니다.'},
+
+{subject:'제도',diff:'하',type:'single',q:'DNFBP의 의미로 가장 적절한 것은?',opts:['지정 비금융사업자 및 전문직(Designated Non-Financial Businesses and Professions)','예금보험대상 금융기관','국제결제은행 회원기관','디지털자산 전용 거래소','국가 신용평가기관'],a:0,exp:'DNFBP는 카지노, 부동산중개업자, 귀금속거래상, 변호사·회계사 등 금융회사는 아니지만 자금세탁 위험이 있다고 평가되는 업종·전문직을 포괄하는 FATF 용어입니다.'},
+{subject:'제도',diff:'중',type:'single',q:'다음 중 FATF 권고사항상 DNFBP(지정 비금융사업자 및 전문직)에 해당하지 않는 것은?',opts:['카지노','부동산중개업자','보석·귀금속 거래상','변호사·회계사 등 전문직','일반 편의점'],a:4,exp:'카지노·부동산중개업자·귀금속거래상·법률·회계 전문직은 DNFBP에 포함되지만 일반 편의점은 포함되지 않습니다.'},
+{subject:'제도',diff:'상',type:'single',q:'카지노사업자가 FATF 체계상 DNFBP로 분류되는 이유로 가장 적절한 것은?',opts:['현금성 거래가 많고 칩을 이용한 가치이전이 가능해 자금세탁에 취약한 업종으로 평가되기 때문','카지노가 금융회사이기 때문','카지노가 국가기관이기 때문','카지노 이용자가 모두 고위험 고객이기 때문','카지노는 국제기준 적용 대상이 아니기 때문'],a:0,exp:'카지노는 금융회사는 아니지만 현금성·칩 거래 특성상 자금세탁에 취약하다고 평가되어 DNFBP로 분류됩니다.'},
+{subject:'제도',diff:'하',type:'single',q:'국제기준상 \'Shell Bank(셀뱅크)\'에 대한 설명으로 가장 적절한 것은?',opts:['실제 물리적 실체 없이 명의만 존재하는 은행으로, 금융회사간 거래상 원칙적으로 거래가 금지되는 대상','실적이 우수한 온라인전문은행','국영은행의 별칭','카지노 계열 은행','중앙은행의 하부조직'],a:0,exp:'Shell Bank는 실체 없는 명의상 은행으로, 환거래 관계 등에서 원칙적으로 거래가 금지되는 고위험 대상입니다.'},
+{subject:'제도',diff:'중',type:'single',q:'Correspondent Banking(환거래은행) 관계에서 특히 위험도가 높다고 평가되는 유형은?',opts:['Nested(중첩) 관계를 통해 제3의 금융기관이 환거래 계좌를 우회 이용하는 경우','모든 환거래 관계가 동일하게 저위험이다','환거래 관계는 자금세탁과 무관하다','국내 은행간 거래에서만 발생한다','환거래는 법적으로 금지되어 있다'],a:0,exp:'Nested 관계는 제3의 금융기관이 직접 계좌를 개설하지 않고 다른 금융기관의 환거래 계좌를 우회 이용하는 구조로, 추적이 어려워 고위험으로 평가됩니다.'},
+{subject:'제도',diff:'상',type:'single',q:'무역기반 자금세탁(Trade-Based Money Laundering, TBML)의 전형적 기법으로 가장 적절한 것은?',opts:['수출입 송장에 가격을 실제와 다르게 기재(over/under-invoicing)해 자금을 이전하는 방법','정상적인 시장가격으로만 거래하는 방법','모든 무역대금을 현금으로만 결제하는 방법','국내거래에만 한정되는 기법','금융회사를 전혀 거치지 않는 기법'],a:0,exp:'TBML은 무역거래의 가격·수량 등을 조작해 자금을 국가간 이전하는 기법으로, over/under-invoicing이 대표적입니다.'},
+{subject:'제도',diff:'하',type:'single',q:'의심거래보고(STR) 관련 \'비밀유지(Tipping-off) 금지\' 원칙이 의미하는 것은?',opts:['보고 사실을 고객이나 관련자에게 누설해서는 안 된다는 원칙','보고 내용을 감독기관에 공개하지 않아도 된다는 원칙','보고자의 신원을 반드시 공개해야 한다는 원칙','보고 의무 자체를 비밀로 할 수 있다는 원칙','보고서를 영구 비공개해야 한다는 원칙'],a:0,exp:'Tipping-off 금지는 STR 보고 사실이나 관련 정보를 고객 등 관련자에게 누설하지 못하도록 하는 원칙입니다.'},
+{subject:'제도',diff:'중',type:'single',q:'자금세탁방지 관련 \'안전항 조항(Safe Harbor)\'이 보장하는 것으로 가장 적절한 것은?',opts:['성실하게 의심거래를 보고한 금융회사·종사자에게 그로 인한 법적 책임을 면제 또는 경감해주는 것','금융회사의 세금을 면제해주는 것','고객의 계좌를 영구 보호해주는 것','카지노 영업을 보장해주는 것','감독기관의 검사를 면제해주는 것'],a:0,exp:'Safe Harbor는 성실한 STR 보고자를 민형사상 책임으로부터 보호함으로써 적극적인 보고를 유도하는 장치입니다.'},
+{subject:'제도',diff:'중',type:'single',q:'\'전신송금(Wire Transfer) 관련 정보제공 규칙(FATF 권고 16)\'의 취지로 가장 적절한 것은?',opts:['송금인·수취인 정보를 거래 전 과정에서 함께 이전하도록 하여 자금흐름의 투명성을 확보하기 위해','송금 수수료를 표준화하기 위해','환율을 통일하기 위해','송금 한도를 없애기 위해','은행간 경쟁을 촉진하기 위해'],a:0,exp:'FATF 권고 16은 전신송금시 송수신인 정보를 함께 이전하도록 하여 자금흐름을 추적 가능하게 하는 것을 목적으로 합니다.'},
+{subject:'제도',diff:'상',type:'single',q:'가상자산 이전 시 송수신인 정보를 함께 제공하도록 하는 \'트래블룰\'이 국내에서 전면 시행된 날짜는?',opts:['2021년 3월 25일','2021년 9월 25일','2022년 3월 25일','2022년 9월 25일','2023년 3월 25일'],a:2,exp:'2021.3.25 시행된 것은 가상자산사업자 신고의무 조항이며, 트래블룰 자체는 1년 유예를 거쳐 2022.3.25 전면 시행되었습니다. 두 날짜를 혼동하지 않도록 주의하세요.'},
+{subject:'제도',diff:'중',type:'single',q:'가상자산사업자(VASP)가 특금법상 신고의무 대상이 된 시행일은?',opts:['2020년 3월 25일','2021년 3월 25일','2022년 3월 25일','2023년 3월 25일','2024년 3월 25일'],a:1,exp:'개정 특금법에 따른 가상자산사업자 신고의무는 2021년 3월 25일부터 시행되었습니다.'},
+{subject:'제도',diff:'최상',type:'multi',q:'다음 중 국내 가상자산 관련 제도의 시행 시점을 옳게 짝지은 것을 모두 고르시오.',opts:['가상자산사업자 신고의무 - 2021.3.25','트래블룰 전면시행 - 2022.3.25','가상자산이용자보호법 시행 - 2024.7.19','가상자산이용자보호법 시행 - 2021.3.25','트래블룰 전면시행 - 2021.3.25'],a:[0,1,2],exp:'신고의무(2021.3.25) → 트래블룰 전면시행(2022.3.25) → 가상자산이용자보호법 시행(2024.7.19) 순으로 진행되었습니다.'},
+{subject:'제도',diff:'하',type:'single',q:'FATF의 4단계 평가에서 각국의 법·제도 정비 수준을 평가하는 것을 무엇이라 하는가?',opts:['기술적 이행(Technical Compliance) 평가','실효성(Effectiveness) 평가','재무건전성 평가','신용등급 평가','예산 평가'],a:0,exp:'기술적 이행 평가는 각국의 법·제도가 FATF 권고사항에 부합하도록 정비되어 있는지를 평가합니다.'},
+{subject:'제도',diff:'중',type:'single',q:'FATF 평가에서 \'실효성(Effectiveness)\' 평가가 측정하는 것은?',opts:['법·제도가 실제로 얼마나 효과적으로 작동하는지','법령의 조문 수','금융회사의 매출액','국가의 GDP','금융회사의 임직원 수'],a:0,exp:'실효성 평가는 제도가 서류상으로만 존재하는지, 실제 운용에서 효과를 내는지를 측정합니다.'},
+{subject:'제도',diff:'상',type:'single',q:'FATF 4차 라운드 평가체계에서 실효성 평가에 사용되는 \'Immediate Outcomes(즉각적 성과)\'의 개수는? (⚠ 교재 표기와 대조 권장)',opts:['8개','9개','10개','11개','12개'],a:3,exp:'FATF 4차 라운드 방법론에서는 11개의 Immediate Outcomes를 기준으로 실효성을 평가합니다.'},
+{subject:'제도',diff:'중',type:'single',q:'FATF 기술적 이행 평가의 등급 체계에 해당하지 않는 것은?',opts:['Compliant(이행)','Largely Compliant(대체로 이행)','Partially Compliant(부분 이행)','Non-Compliant(미이행)','Excellent(우수)'],a:4,exp:'기술적 이행 평가는 Compliant / Largely Compliant / Partially Compliant / Non-Compliant 4단계로 구성되며 Excellent는 해당 등급체계에 없습니다.'},
+{subject:'제도',diff:'중',type:'single',q:'FATF가 자금세탁방지체계에 심각한 결함이 있다고 판단한 국가를 지정해 강화된 모니터링 등을 요구하는 절차를 통칭하는 개념으로 가장 적절한 것은?',opts:['고위험국가 식별 및 후속조치 절차(그레이리스트·블랙리스트 등)','우수국가 시상 제도','국가신용등급 평가','무역장벽 지정 제도','환율조작국 지정 제도'],a:0,exp:'FATF는 결함이 있는 국가를 강화된 모니터링 대상(그레이리스트) 또는 조치대상(블랙리스트)으로 지정해 관리합니다.'},
+{subject:'제도',diff:'하',type:'single',q:'정치적 주요인물(PEP)의 유형 구분으로 일반적으로 다루어지는 것이 아닌 것은?',opts:['국내 PEP','외국 PEP','국제기구 PEP','family PEP(가족 및 밀접한 관계자)','카지노 VIP 등급 고객'],a:4,exp:'PEP는 국내·외국·국제기구·가족 및 밀접한 관계자 등으로 구분되며, 카지노 VIP 등급은 PEP 분류 체계가 아닙니다.'},
+{subject:'제도',diff:'상',type:'single',q:'실제소유자 확인이 특히 중요하게 다뤄지는 이유로 가장 적절한 것은?',opts:['법인·신탁 등 법적 장치(legal arrangement) 뒤에 실제 지배자를 숨겨 자금세탁에 이용할 위험이 크기 때문','법인의 세금을 줄여주기 위해','법인의 주식가치를 평가하기 위해','법인의 매출을 추정하기 위해','법인의 임직원 수를 파악하기 위해'],a:0,exp:'법인·신탁 명의 뒤에 실제 지배자를 숨기는 방식은 대표적인 자금세탁 악용 수법이어서 실제소유자 확인이 중요합니다.'},
+{subject:'제도',diff:'중',type:'single',q:'비영리단체(NPO)가 자금세탁방지 국제기준에서 특별히 다뤄지는 이유는?',opts:['테러자금조달 등에 악용될 위험이 있다고 평가되기 때문','수익성이 높기 때문','모든 비영리단체는 반드시 고위험이기 때문','비영리단체는 법적 규제 대상이 아니기 때문','비영리단체는 금융회사이기 때문'],a:0,exp:'NPO는 기부금 등 자금흐름의 투명성이 낮을 수 있어 테러자금조달에 악용될 위험이 있다고 평가됩니다.'},
+{subject:'제도',diff:'하',type:'single',q:'현금집약적 업종(Cash-intensive business)이 자금세탁방지 관점에서 고위험으로 분류되는 주된 이유는?',opts:['현금거래 비중이 높아 자금출처 추적이 상대적으로 어렵기 때문','모든 현금거래는 불법이기 때문','현금은 법정통화가 아니기 때문','현금거래는 세금이 면제되기 때문','현금거래는 국제기준의 적용 대상이 아니기 때문'],a:0,exp:'현금은 거래흐름이 전산상 추적되지 않아 자금출처 확인이 어려워 관련 업종이 고위험으로 평가됩니다.'},
+{subject:'제도',diff:'중',type:'single',q:'\'자금세탁\'과 \'선행범죄(Predicate Offense)\'의 관계에 대한 설명으로 가장 적절한 것은?',opts:['자금세탁은 선행범죄로 얻은 수익을 정상적인 것처럼 위장하는 후속 행위이다','자금세탁과 선행범죄는 전혀 무관한 별개의 개념이다','선행범죄가 없어도 자금세탁죄가 항상 성립한다','선행범죄는 반드시 금융범죄여야 한다','선행범죄는 자금세탁 이후에만 발생한다'],a:0,exp:'자금세탁은 마약범죄, 사기, 뇌물 등 선행범죄로 얻은 불법수익을 정상적인 자금처럼 위장하는 후속 행위로 정의됩니다.'},
+{subject:'제도',diff:'상',type:'single',q:'프라이빗뱅킹(Private Banking) 서비스가 자금세탁방지 관점에서 고위험으로 평가되는 이유로 가장 적절한 것은?',opts:['고액자산가 대상의 맞춤형·비밀유지 성격이 강한 서비스 특성상 위험이 상대적으로 높게 평가되기 때문','모든 고객이 저위험이기 때문','공개된 표준상품만 판매하기 때문','현금거래가 전혀 없기 때문','감독기관의 검사 대상이 아니기 때문'],a:0,exp:'프라이빗뱅킹은 고액자산가 맞춤형·비밀유지 서비스 특성상 실제소유자 확인 등이 더 까다로워 고위험으로 평가됩니다.'},
+{subject:'제도',diff:'중',type:'single',q:'신탁(Trust) 등 법적 장치(Legal Arrangement)가 자금세탁방지 측면에서 특히 주의가 필요한 이유는?',opts:['설정자·수탁자·수익자 구조가 복잡해 실제소유자 파악이 어려울 수 있기 때문','신탁은 법적으로 금지되어 있기 때문','신탁은 반드시 해외에서만 설정되기 때문','신탁은 금융회사만 이용 가능하기 때문','신탁은 국제기준의 적용 대상이 아니기 때문'],a:0,exp:'신탁은 설정자·수탁자·수익자가 분리되는 구조상 실제소유자 파악이 까다로워 자금세탁방지 측면에서 주의가 필요합니다.'},
+{subject:'제도',diff:'최상',type:'single',q:'다음 중 자금세탁 위험이 상대적으로 높다고 평가되는 사례로 가장 적절한 것은?',opts:['복잡한 지분구조를 가진 여러 단계의 해외 페이퍼컴퍼니를 통해 자금을 이전하는 거래','동일 지역 내 소규모 개인간 소액 현금거래','급여계좌를 통한 정기적 급여 입금','공공기관에 대한 세금 납부','국채 매입을 위한 증권계좌 거래'],a:0,exp:'다단계 해외 페이퍼컴퍼니를 이용한 자금이전은 실제소유자 추적이 어려워 대표적인 고위험 유형으로 평가됩니다.'},
+{subject:'제도',diff:'하',type:'single',q:'국내 자금세탁방지 관련 법집행기관(정보제공 대상기관)에 해당하지 않는 것은?',opts:['검찰청','경찰청','국세청','관세청','일반 사기업의 감사팀'],a:4,exp:'검찰청·경찰청·국세청·관세청 등은 KoFIU로부터 정보를 제공받는 법집행기관에 해당하지만 일반 사기업 감사팀은 해당하지 않습니다.'},
+{subject:'제도',diff:'중',type:'single',q:'UN 안보리 결의에 따른 제재대상자 명단 관리와 관련해 금융회사등이 취해야 할 조치로 가장 적절한 것은?',opts:['제재대상자 명단과 고객·거래상대방을 대조(스크리닝)하여 해당되는 경우 자산동결 등 필요한 조치를 취한다','제재대상자 명단은 참고만 하고 별도 조치는 불필요하다','제재대상자 명단은 국내법과 무관하다','제재대상자 여부는 확인할 의무가 없다','제재대상자 명단은 카지노에는 적용되지 않는다'],a:0,exp:'금융회사등은 제재대상자 명단과 고객정보를 대조(스크리닝)하고, 해당시 자산동결 등 조치를 취해야 합니다.'},
+{subject:'제도',diff:'중',type:'single',q:'Egmont Group의 주된 기능으로 가장 적절한 것은?',opts:['각국 FIU 간 안전한 채널을 통한 정보교환 및 협력 촉진','각국 중앙은행의 통화정책 조율','국제 신용평가 기준 제정','국제 회계기준 제정','국제 무역규범 제정'],a:0,exp:'Egmont Group은 각국 FIU 간 정보교환 채널(Egmont Secure Web 등)을 운영하며 국제협력을 촉진합니다.'},
+{subject:'제도',diff:'상',type:'single',q:'\'소스 오브 웰스(Source of Wealth)\'와 \'소스 오브 펀드(Source of Funds)\'의 구분에 대한 설명으로 가장 적절한 것은?',opts:['전자는 고객의 전체 자산이 형성된 배경(축적 과정)을, 후자는 특정 거래에 사용된 자금의 출처를 의미한다','두 용어는 동일한 의미로 혼용된다','전자는 거래별 자금출처, 후자는 전체 자산형성 배경을 의미한다','두 개념 모두 국제기준과 무관하다','두 개념 모두 카지노에는 적용되지 않는다'],a:0,exp:'Source of Wealth는 전체 자산형성 배경, Source of Funds는 개별 거래에 쓰인 자금의 출처로 구분됩니다.'},
+{subject:'제도',diff:'중',type:'single',q:'국가위험평가(NRA) 결과가 실무적으로 활용되는 방식으로 가장 적절한 것은?',opts:['금융회사등의 위험기반접근법(RBA) 이행 및 감독기관의 정책 수립에 반영된다','NRA 결과는 비공개로만 보관되며 활용되지 않는다','NRA는 개별 고객의 신용평가에만 활용된다','NRA는 세무조사에만 활용된다','NRA는 국가 신용등급에만 활용된다'],a:0,exp:'NRA 결과는 금융회사의 RBA 이행 및 감독기관의 정책 수립에 반영되는 것이 일반적입니다.'},
+{subject:'제도',diff:'하',type:'single',q:'자금세탁방지 관련 \'고위험 국가\'와의 거래에 대한 일반적 원칙으로 가장 적절한 것은?',opts:['강화된 고객확인(EDD) 등 추가적인 위험경감조치를 적용한다','모든 거래를 예외 없이 거절해야 한다','일반 거래와 동일하게 취급한다','추가 확인 없이 우대 조건을 적용한다','국내법상 규율 근거가 없다'],a:0,exp:'고위험 국가 관련 거래는 무조건 거절이 아니라 EDD 등 강화된 조치를 적용하는 것이 원칙입니다.'},
+{subject:'제도',diff:'중',type:'multi',q:'다음 중 국제기준상 강화된 고객확인(EDD)이 요구될 수 있는 경우를 모두 고르시오.',opts:['PEP 고객','고위험국가 관련 거래','복잡한 소유구조를 가진 법인 고객','급여 이체만 이용하는 일반 개인고객','저위험으로 평가된 표준 예금상품 이용 고객'],a:[0,1,2],exp:'PEP, 고위험국가 관련 거래, 복잡한 소유구조의 법인 고객은 EDD 대상이 될 수 있는 대표적 사례입니다.'},
+{subject:'제도',diff:'상',type:'single',q:'자금세탁방지 관련 \'구조화(Structuring)\'에 대한 설명으로 가장 적절한 것은?',opts:['보고 기준금액을 회피하기 위해 하나의 큰 거래를 여러 개의 소액 거래로 나누는 행위','거래를 투명하게 공개하는 행위','금융상품의 구조를 설계하는 정상적 금융업무','세금을 정상적으로 신고하는 행위','금융회사의 조직을 개편하는 행위'],a:0,exp:'구조화는 CTR·CDD 등 보고·확인 기준금액을 회피하기 위해 거래를 소액으로 분할하는 행위입니다.'},
+{subject:'제도',diff:'중',type:'single',q:'\'스머핑(Smurfing)\'에 대한 설명으로 가장 적절한 것은?',opts:['다수의 인원을 동원해 각각 소액으로 분산 입금하는 구조화 기법의 한 형태','대규모 단일 거래를 지칭하는 용어','합법적인 급여 지급 방식','국채 발행 방식','외환보유고 관리 기법'],a:0,exp:'스머핑은 여러 명(스머프)을 동원해 각각 소액으로 나누어 입금하는 구조화 기법의 한 형태입니다.'},
+{subject:'제도',diff:'중',type:'single',q:'\'레이어링(Layering)\' 단계에서 자주 활용되는 기법으로 가장 적절한 것은?',opts:['여러 국가·계좌를 거친 복잡한 자금이동을 통해 자금출처를 흐리는 행위','최초로 불법자금을 금융시스템에 투입하는 행위','자금을 정상소득처럼 최종적으로 사용하는 행위','단순 예금 개설 행위','단순 대출 상환 행위'],a:0,exp:'레이어링은 여러 계좌·국가를 거치는 복잡한 이동을 통해 자금출처를 흐리는 단계입니다.'},
+{subject:'제도',diff:'하',type:'single',q:'\'인테그레이션(Integration)\' 단계의 특징으로 가장 적절한 것은?',opts:['세탁된 자금이 정상적인 경제활동(부동산 매입, 사업투자 등)에 투입되어 합법적 자산처럼 보이게 되는 단계','불법자금을 최초로 금융시스템에 투입하는 단계','자금출처를 복잡하게 만드는 단계','의심거래를 보고하는 단계','고객확인을 실시하는 단계'],a:0,exp:'인테그레이션은 세탁된 자금이 부동산·사업투자 등 정상 경제활동에 투입되어 합법적 자산처럼 보이게 되는 최종 단계입니다.'},
+{subject:'제도',diff:'중',type:'single',q:'카지노 자금세탁 위험과 관련해 \'정킷(Junket) 운영자\'에 대한 설명으로 가장 적절한 것은?',opts:['고액 도박고객을 카지노에 유치·중개하는 역할을 하며, 자금출처가 불투명할 경우 자금세탁에 이용될 위험이 있다고 평가되는 존재','카지노의 회계감사를 전담하는 정부기관','카지노 게임기구를 검사하는 기관','카지노 종사자의 노동조합','카지노 이용자 보호를 위한 소비자단체'],a:0,exp:'정킷 운영자는 고액 고객을 카지노에 유치·중개하는 역할을 하며, 자금출처 확인이 어려운 경우 자금세탁 위험요인으로 지목됩니다.'},
+{subject:'제도',diff:'최상',type:'single',q:'다음 중 카지노 자금세탁 위험 요인으로 가장 거리가 먼 것은?',opts:['칩을 이용한 가치이전이 가능해 실물화폐처럼 유통될 수 있는 특성','고액 현금거래가 빈번하게 발생할 수 있는 특성','국경을 넘는 고액자산가 고객이 이용할 수 있는 특성','카지노 종사자의 급여체계가 시급제라는 특성','정킷 등 제3자를 통한 고객 유치 구조'],a:3,exp:'칩의 가치이전성, 고액 현금거래, 국제 고액고객 이용, 정킷 구조는 실제 위험요인으로 다뤄지지만 종사자의 급여체계 방식은 자금세탁 위험요인과 직접 관련이 없습니다.'},
+{subject:'제도',diff:'중',type:'single',q:'다음 중 자금세탁방지 관련 \'게이트키퍼(Gatekeeper)\'로 언급되는 전문직에 해당하지 않는 것은?',opts:['변호사','회계사','법무사·공증인','신탁·회사설립대리업자','일반 사무보조 아르바이트'],a:4,exp:'변호사·회계사·법무사·신탁회사설립대리업자는 게이트키퍼로 다뤄지는 대표적 전문직이며, 일반 사무보조 아르바이트는 해당하지 않습니다.'},
+{subject:'제도',diff:'하',type:'single',q:'자금세탁방지 관련 \'고객수용정책(Customer Acceptance Policy)\'이 의미하는 것은?',opts:['금융회사가 신규 고객을 받아들일지 여부와 그 기준을 정한 내부정책','고객의 대출 승인 기준','고객의 신용카드 발급 기준','고객의 예금이자율 산정 기준','고객의 민원처리 절차'],a:0,exp:'고객수용정책은 신규 고객을 받아들일지 여부와 그 판단기준을 정한 금융회사의 내부정책입니다.'},
+{subject:'제도',diff:'중',type:'single',q:'자금세탁방지 관련 \'내부통제체계\'에 일반적으로 포함되는 요소로 가장 거리가 먼 것은?',opts:['보고책임자 지정','임직원 교육 및 연수','업무지침 수립','독립적 감사(내부평가)','금융상품의 판매실적 극대화 전략'],a:4,exp:'보고책임자 지정, 교육·연수, 업무지침 수립, 독립적 감사는 내부통제체계의 핵심 요소이지만 판매실적 극대화 전략은 해당하지 않습니다.'},
+{subject:'제도',diff:'중',type:'single',q:'자금세탁방지 관련 \'보고책임자(Compliance Officer)\'의 역할로 가장 적절한 것은?',opts:['의심거래 등 내부보고를 종합해 최종적으로 KoFIU에 보고할지를 결정하는 역할','금융상품의 수익률을 관리하는 역할','고객의 투자성향을 분석하는 역할','금융회사의 인사평가를 담당하는 역할','금융회사의 광고를 기획하는 역할'],a:0,exp:'보고책임자는 지점 등에서 올라온 내부보고를 종합해 KoFIU에 대한 최종 보고 여부를 결정하는 역할을 수행합니다.'},
+{subject:'제도',diff:'상',type:'single',q:'자금세탁방지 관련 국제기준에서 \'위험경감조치(Risk Mitigation Measures)\'의 예로 가장 적절하지 않은 것은?',opts:['고위험 고객에 대한 EDD 실시','거래한도 설정 및 모니터링 강화','고위험 상품·서비스 취급 제한','정기적인 고객정보 갱신','고위험 고객에게 우대 수수료 제공'],a:4,exp:'EDD, 거래한도·모니터링 강화, 취급 제한, 정보 갱신은 위험경감조치의 예이지만, 고위험 고객에게 우대 수수료를 제공하는 것은 오히려 위험을 키우는 조치입니다.'},
+{subject:'제도',diff:'중',type:'single',q:'다음 중 자금세탁방지 관련 \'지속적 모니터링(Ongoing Monitoring)\'의 목적으로 가장 적절한 것은?',opts:['고객의 거래패턴 변화를 지속적으로 파악해 이상거래를 조기에 식별하기 위해','고객의 마케팅 동의를 얻기 위해','고객의 대출한도를 상향하기 위해','고객의 세금환급을 처리하기 위해','고객의 신용카드 한도를 조정하기 위해'],a:0,exp:'지속적 모니터링은 고객의 거래패턴 변화를 지속적으로 파악해 이상거래를 조기에 식별하는 것을 목적으로 합니다.'},
+{subject:'제도',diff:'하',type:'single',q:'다음 중 자금세탁방지 관련 \'내부고발자 보호(Whistleblower Protection)\'의 취지로 가장 적절한 것은?',opts:['부정행위를 신고한 임직원이 불리한 처우를 받지 않도록 보호함으로써 신고를 활성화하기 위해','내부고발을 원천적으로 금지하기 위해','내부고발자의 신원을 반드시 공개하기 위해','내부고발 제도는 국내법상 존재하지 않기 때문에','내부고발은 카지노에만 적용되기 때문에'],a:0,exp:'내부고발자 보호는 신고한 임직원이 불리한 처우를 받지 않도록 하여 적극적인 신고를 유도하려는 취지입니다.'},
+{subject:'제도',diff:'중',type:'single',q:'자금세탁방지 관련 국제기준의 지속적 발전 배경으로 가장 적절한 것은?',opts:['가상자산 등 신종 금융수단의 등장, 국제 범죄기법의 고도화 등 환경변화에 대응하기 위해 기준이 주기적으로 개정된다','국제기준은 1989년 제정된 이후 한 번도 개정되지 않았다','국제기준은 특정 국가의 이익만을 위해 만들어졌다','국제기준은 법적 구속력이 있어 개정이 불가능하다','국제기준은 카지노와 무관하여 개정 필요가 없다'],a:0,exp:'가상자산 등 신종 수단의 등장과 범죄기법 고도화에 대응하기 위해 FATF 권고사항은 주기적으로 개정되어 왔습니다.'},
+{subject:'제도',diff:'상',type:'single',q:'최근 국내 자금세탁방지 관련 규제 동향으로 가장 적절한 것은?',opts:['디지털자산, 가상자산 관련 규제가 지속적으로 정비·강화되고 있으며 관련 시행령·감독규정 개정이 이어지고 있다','모든 관련 규제가 이미 완성되어 더 이상 개정되지 않는다','디지털자산은 자금세탁방지 규율 대상에서 완전히 제외되었다','카지노 관련 규정은 최근 전면 폐지되었다','관련 규제는 국제기준과 무관하게 독자적으로만 운영된다'],a:0,exp:'실제로 최근까지도 특정금융정보법 및 하위규정 개정이 이어지고 있는 만큼, 시험 응시 전 최신 개정사항을 확인하는 것이 좋습니다.'},
+{subject:'제도',diff:'중',type:'single',q:'\'금융정보분석원(KoFIU)\'과 \'금융감독원(FSS)\'의 관계에 대한 설명으로 가장 적절한 것은?',opts:['KoFIU가 정책·법집행정보 제공을 담당하고, 금감원은 금융위의 위탁을 받아 금융회사에 대한 자금세탁방지 검사업무 등을 수행할 수 있다','두 기관은 완전히 동일한 기관이다','금감원이 KoFIU의 상급기관이다','KoFIU는 금감원의 하부부서이다','두 기관은 서로 어떠한 협력도 하지 않는다'],a:0,exp:'KoFIU는 정보의 수집·분석·제공을 담당하고, 금감원은 위탁을 받아 금융회사에 대한 검사업무를 수행하는 등 역할이 구분되어 있습니다.'},
+{subject:'제도',diff:'최상',type:'single',q:'카지노 서베일런스 담당자가 동일한 고객이 짧은 기간 내 여러 창구를 통해 각각 300만원에 조금 못 미치는 금액으로 칩을 반복 구매하는 것을 포착했다. 가장 적절한 대응은?',opts:['기준금액 미달이므로 조치가 불필요하다','기준금액 회피를 위한 분할거래(구조화) 의심 정황으로 판단해 내부보고 및 STR 검토 절차를 진행한다','고객 응대를 전면 중단하고 즉시 퇴장시킨다','해당 고객의 다음 방문부터 자동으로 출입을 금지한다','문제가 되지 않도록 거래내역을 삭제한다'],a:1,exp:'기준금액을 의도적으로 회피하려는 정황은 전형적인 구조화 패턴으로, 내부보고 절차를 거쳐 STR 검토로 이어지는 것이 적절한 대응입니다. 거래내역 삭제는 오히려 별도의 법적 문제를 야기할 수 있습니다.'},
+{subject:'제도',diff:'최상',type:'single',q:'다음 중 \'기술적 이행(Technical Compliance)\'과 \'실효성(Effectiveness)\' 평가의 관계에 대한 설명으로 가장 적절한 것은?',opts:['법·제도가 잘 정비되어 있어도(기술적 이행 우수) 실제 운용에서 효과적으로 작동하지 않으면(실효성 낮음) 전체 평가가 낮게 나올 수 있다','기술적 이행이 우수하면 실효성은 자동으로 보장된다','실효성 평가는 기술적 이행과 전혀 무관하게 산정된다','기술적 이행 평가만으로 국가별 최종 등급이 결정된다','실효성 평가는 폐지되어 더 이상 사용되지 않는다'],a:0,exp:'FATF 4차 라운드 평가는 기술적 이행과 실효성을 함께 보므로, 법제도가 잘 갖춰져 있어도 실제 작동이 미흡하면 종합 평가가 낮아질 수 있습니다.'},
+
+{subject:'제도',diff:'하',type:'single',q:'FATF와 유사하게 특정 지역에서 자금세탁방지 국제기준의 이행을 촉진하는 지역기구를 통칭하는 용어는?',opts:['FSRB(FATF-Style Regional Body)','IMF','World Bank','OECD','WTO'],a:0,exp:'FSRB는 FATF와 유사한 기능을 지역 차원에서 수행하는 기구를 통칭하는 용어입니다.'},
+{subject:'제도',diff:'하',type:'single',q:'아시아·태평양 지역의 대표적 FSRB로서 우리나라도 회원으로 참여하고 있는 기구는?',opts:['APG(Asia/Pacific Group on Money Laundering)','Egmont Group','Wolfsberg Group','Basel Committee','IOSCO'],a:0,exp:'APG는 아시아·태평양 지역의 FSRB로, 한국도 회원국으로 참여하고 있습니다.'},
+{subject:'제도',diff:'중',type:'single',q:'FSRB(지역기구)의 주된 역할로 가장 적절한 것은?',opts:['FATF 국제기준을 지역 차원에서 이행 촉진 및 회원국 상호평가 수행','독자적인 새로운 국제기준을 FATF와 무관하게 제정','각국 중앙은행 통화정책 결정','국제 신용평가','국제 무역분쟁 조정'],a:0,exp:'FSRB는 FATF 기준의 지역 내 이행을 촉진하고 회원국에 대한 상호평가를 수행합니다.'},
+{subject:'제도',diff:'중',type:'single',q:'FATF 40개 권고사항은 일반적으로 몇 개의 영역(챕터)으로 구분되어 다뤄지는가?',opts:['3개','4개','5개','6개','7개'],a:4,exp:'통상 정책·조정, 자금세탁·몰수, 테러자금조달·확산금융, 예방조치, 투명성(법인·법적장치), 권한과 책임, 국제협력 등 7개 영역으로 구분됩니다.'},
+{subject:'제도',diff:'상',type:'single',q:'다음 중 FATF 권고사항이 다루는 영역에 해당하지 않는 것은?',opts:['예방조치(고객확인 등)','국제협력','법인·법적장치의 투명성','통화정책 운용','자금세탁·몰수'],a:3,exp:'통화정책 운용은 중앙은행의 영역으로, FATF 권고사항이 다루는 영역에 해당하지 않습니다.'},
+
+{subject:'제도',diff:'중',type:'single',q:'UN 안보리 결의 1267호와 관련된 제재는 주로 어떤 대상과 관련이 있는가?',opts:['알카에다 등 테러조직 관련 제재','일반 상거래 분쟁','국가간 관세 분쟁','환경규제 위반','저작권 침해'],a:0,exp:'UN 안보리 결의 1267호는 알카에다 등 테러조직 관련 자산동결 등 제재체계의 근거로 다뤄집니다.'},
+{subject:'제도',diff:'중',type:'single',q:'UN 안보리 결의 1373호의 주된 내용으로 가장 적절한 것은?',opts:['각국에 테러자금조달 방지를 위한 입법·조치를 취하도록 요구','국제무역 관세 인하','난민 보호 조치','환경오염 방지','지식재산권 보호'],a:0,exp:'결의 1373호는 각국이 테러자금조달 방지를 위한 입법·행정조치를 취하도록 요구하는 내용을 담고 있습니다.'},
+{subject:'제도',diff:'하',type:'single',q:'금융회사등이 제재대상자 명단 스크리닝을 실시하지 않을 경우 발생할 수 있는 위험으로 가장 적절한 것은?',opts:['제재위반에 따른 국내외 법적·행정적 제재를 받을 위험','고객 만족도만 낮아질 위험','세금이 늘어날 위험','이자율이 상승할 위험','아무런 위험도 없음'],a:0,exp:'제재대상자 스크리닝 미실시는 국내외 제재위반으로 이어져 법적·행정적 불이익을 받을 위험이 있습니다.'},
+
+{subject:'제도',diff:'중',type:'single',q:'실제소유자 정보를 별도의 공적 등록시스템(Beneficial Ownership Registry)에 등록·관리하도록 하는 국제적 흐름의 목적은?',opts:['법인 뒤에 숨은 실제소유자 정보의 투명성을 높여 자금세탁·부패를 예방하기 위해','법인의 세금을 낮추기 위해','법인 설립 절차를 간소화하기 위해','법인의 주가를 관리하기 위해','법인의 광고를 규제하기 위해'],a:0,exp:'실제소유자 등록시스템은 법인 명의 뒤에 숨은 실제 지배자를 투명하게 관리해 자금세탁·부패를 예방하려는 국제적 흐름입니다.'},
+{subject:'제도',diff:'상',type:'single',q:'환거래은행(Correspondent Bank) 관계 수립 전 통상적으로 요구되는 실사(Due Diligence) 항목으로 가장 거리가 먼 것은?',opts:['상대 은행의 소유·경영구조 파악','상대 은행의 AML/CFT 통제수준 평가','상대 은행의 감독당국 현황 확인','상대 은행이 Shell Bank인지 여부 확인','상대 은행의 마케팅 광고 문구 검토'],a:4,exp:'소유·경영구조, AML/CFT 통제수준, 감독현황, Shell Bank 여부는 환거래 실사의 핵심 항목이지만 광고 문구 검토는 해당하지 않습니다.'},
+{subject:'제도',diff:'하',type:'single',q:'\'뉴 페이먼트 테크놀로지(New Payment Technologies)\'가 자금세탁방지 측면에서 주목받는 이유로 가장 적절한 것은?',opts:['익명성·비대면성이 높아 기존 금융시스템보다 자금세탁 탐지가 어려울 수 있기 때문','모든 신기술은 자동으로 안전하기 때문','신기술은 국제기준의 적용 대상이 아니기 때문','신기술은 반드시 정부가 직접 운영하기 때문','신기술은 오프라인 거래만 가능하기 때문'],a:0,exp:'새로운 결제기술은 익명성·비대면성이 높아 자금세탁 탐지가 어려울 수 있다는 점에서 국제기준상 주목받는 위험요인입니다.'},
+{subject:'제도',diff:'중',type:'single',q:'스테이블코인(Stablecoin)이 자금세탁방지 관점에서 논의되는 주된 이유로 가장 적절한 것은?',opts:['가치의 안정성으로 대규모 자금이동에 활용될 가능성이 있어 국제기준 논의 대상이 되고 있기 때문','스테이블코인은 실물화폐와 무관하기 때문','스테이블코인은 모든 국가에서 이미 전면 금지되었기 때문','스테이블코인은 은행만 발행 가능하기 때문','스테이블코인은 국제기준 논의 대상이 전혀 아니기 때문'],a:0,exp:'스테이블코인은 가치 안정성 때문에 대규모 자금이동 수단으로 활용될 위험이 있어 국제기준상 지속적으로 논의되고 있습니다.'},
+{subject:'제도',diff:'중',type:'single',q:'가상자산사업자(VASP)의 신고요건과 관련해 일반적으로 요구되는 사항으로 가장 적절한 것은?',opts:['정보보호 관리체계 인증(ISMS 등) 및 실명확인 입출금계정 확보 등','신고 요건은 존재하지 않는다','신고는 자율사항으로 위반시 제재가 없다','신고는 해외 사업자에게만 적용된다','신고는 은행업 인가와 완전히 동일한 절차이다'],a:0,exp:'VASP 신고요건에는 정보보호 관리체계 인증, 실명확인 입출금계정 확보 등이 포함되는 것으로 다뤄집니다.'},
+
+{subject:'제도',diff:'하',type:'single',q:'국내 자금세탁방지 관련 \'정책협의회\' 성격의 기구가 두어지는 목적으로 가장 적절한 것은?',opts:['관계기관 간 국가 위험평가·정책방향 등을 협의·조정하기 위해','금융회사의 인사를 결정하기 위해','금융상품의 가격을 결정하기 위해','금융회사의 광고를 심의하기 위해','개별 고객의 신용등급을 심의하기 위해'],a:0,exp:'관계기관 협의회는 국가 위험평가 및 정책방향 등을 협의·조정하기 위한 목적으로 운영됩니다.'},
+{subject:'제도',diff:'중',type:'single',q:'특금법 시행령상 금융정보분석원장이 관계기관과 함께 협의회를 구성해 검토하는 사항으로 가장 적절한 것은?',opts:['국가 차원의 자금세탁·테러자금조달 위험평가 및 대책','개별 금융회사의 인사평가','금융상품의 광고 문구','금융회사의 사무실 임대료','금융회사의 급여체계'],a:0,exp:'해당 협의회는 국가 차원의 자금세탁·테러자금조달 위험평가 및 대책 검토 등을 담당합니다.'},
+{subject:'제도',diff:'하',type:'single',q:'다음 중 국내에서 자금세탁방지 관련 감독·검사 권한을 위탁받아 수행할 수 있는 기관으로 언급되는 곳은?',opts:['한국은행 또는 금융감독원','문화체육관광부','특허청','관세청 산하 세관','중앙선거관리위원회'],a:0,exp:'금융정보분석원장은 한국은행총재나 금융감독원장 등에게 검사업무를 위탁할 수 있는 것으로 규정되어 있습니다.'},
+{subject:'제도',diff:'중',type:'single',q:'카지노업이 관광진흥법상 허가를 받아야 하는 사업이라는 점과, 특금법상 \'금융회사등\'으로서 별도의 자금세탁방지 의무를 부담한다는 점의 관계로 가장 적절한 설명은?',opts:['카지노업 허가와 특금법상 의무는 각각 다른 법률에 근거한 별개의 규율로, 카지노사업자는 두 규율을 동시에 준수해야 한다','카지노업 허가를 받으면 특금법상 의무는 자동 면제된다','특금법상 의무를 이행하면 카지노업 허가가 취소된다','두 법률은 서로 충돌하여 하나만 적용된다','카지노는 어느 법률의 적용도 받지 않는다'],a:0,exp:'카지노업 허가(관광진흥법)와 자금세탁방지 의무(특금법)는 각각 별개의 법률에 근거한 규율로 동시에 적용됩니다.'},
+{subject:'제도',diff:'상',type:'single',q:'카지노사업자가 특금법상 \'금융회사등\'에 포함되게 된 취지로 가장 적절한 것은?',opts:['카지노의 칩거래 등이 현금과 유사하게 자금세탁에 이용될 수 있다고 보아 예방적 규율 대상에 포함시킨 것','카지노가 은행업 인가를 받았기 때문','카지노가 증권업을 겸영하기 때문','카지노가 보험업을 겸영하기 때문','카지노가 외국환업무를 전담하기 때문'],a:0,exp:'카지노의 칩거래는 현금과 유사한 가치이전 수단으로 이용될 수 있어 예방적 규율 대상에 포함되었습니다.'},
+
+{subject:'제도',diff:'중',type:'single',q:'다음 중 자금세탁의 선행범죄(Predicate Offense) 범위에 대한 설명으로 가장 적절한 것은?',opts:['마약범죄, 사기·횡령, 뇌물·부패범죄, 중대한 조세범죄 등 폭넓은 범죄가 선행범죄로 다뤄질 수 있다','오직 마약범죄만 선행범죄가 될 수 있다','금융범죄만 선행범죄가 될 수 있다','선행범죄 개념은 국제기준에 존재하지 않는다','선행범죄는 반드시 국내에서 발생한 범죄여야 한다'],a:0,exp:'FATF 기준은 조세범죄를 포함해 폭넓은 범죄를 선행범죄로 다루도록 권고하고 있습니다.'},
+{subject:'제도',diff:'중',type:'multi',q:'다음 중 FATF 국제기준상 자금세탁의 선행범죄로 다뤄질 수 있는 범죄를 모두 고르시오.',opts:['마약범죄','사기·횡령','뇌물 및 부패범죄','중대한 조세범죄','단순 교통법규 위반'],a:[0,1,2,3],exp:'마약범죄, 사기·횡령, 뇌물·부패범죄, 중대한 조세범죄는 선행범죄로 다뤄지는 대표적 예이며, 단순 교통법규 위반은 해당하지 않습니다.'},
+{subject:'제도',diff:'하',type:'single',q:'\'인신매매·밀입국 알선\' 등에서 발생한 수익을 세탁하는 행위도 자금세탁방지 국제기준의 규율 대상에 포함되는가?',opts:['포함된다, 인신매매 등도 선행범죄로 다뤄질 수 있다','포함되지 않는다, 인신매매는 전혀 무관하다','국내법에만 존재하고 국제기준에는 없다','카지노에만 해당하는 개념이다','금융회사와는 무관한 개념이다'],a:0,exp:'인신매매·밀입국 알선 등 중대범죄에서 발생한 수익도 자금세탁의 선행범죄 관련 수익으로 규율될 수 있습니다.'},
+
+{subject:'제도',diff:'중',type:'single',q:'자금세탁방지 관련 \'단순 획일적 방식\'과 \'위험기반(리스크베이스) 방식\'의 차이에 대한 설명으로 가장 적절한 것은?',opts:['전자는 정해진 요건만 충족하면 되는 획일적 방식, 후자는 위험도에 따라 강도를 조정하는 방식','두 방식은 완전히 동일하다','후자가 먼저 등장했고 전자가 이를 대체했다','전자는 국제기준에서 권장하는 방식이다','후자는 국내법상 존재하지 않는다'],a:0,exp:'위험기반방식은 위험도에 따라 확인·모니터링 강도를 조정하는 방식으로, 획일적 방식과 대비됩니다.'},
+{subject:'제도',diff:'상',type:'single',q:'다음 중 CDD 이행 시 \'제3자에 의한 위탁(Reliance on Third Parties)\'이 허용되는 일반적 조건으로 가장 적절한 것은?',opts:['위탁받는 제3자가 신뢰할 수 있는 규제·감독을 받고 있고, 최종적으로 CDD 이행의 책임은 위탁한 금융회사에 남는 경우','제3자에게 위탁하면 위탁한 금융회사의 책임이 완전히 소멸한다','제3자 위탁은 국제기준상 전면 금지된다','제3자 위탁은 반드시 해외 기관에만 가능하다','제3자 위탁은 서면 계약 없이도 가능하다'],a:0,exp:'제3자 위탁이 허용되더라도 CDD 이행에 대한 최종 책임은 위탁한 금융회사에 남는다는 점이 핵심입니다.'},
+
+{subject:'제도',diff:'중',type:'single',q:'다음 중 \'단순화된 고객확인(Simplified CDD)\'이 적용될 수 있는 경우로 가장 적절한 것은?',opts:['자금세탁·테러자금조달 위험이 낮다고 평가된 경우','모든 신규 고객에게 예외 없이 적용','고위험 국가 관련 거래에 적용','PEP 고객에게 적용','거래금액과 무관하게 항상 적용'],a:0,exp:'단순화된 CDD는 위험이 낮다고 평가된 경우에 한해 적용될 수 있는 절차입니다.'},
+{subject:'제도',diff:'하',type:'single',q:'다음 중 고객확인(CDD) 면제 또는 간소화가 가능한 사례로 가장 적절한 것은?',opts:['자금세탁 위험이 현저히 낮다고 감독기관이 고시로 정하는 특정 금융거래','모든 신규 계좌개설','모든 일회성 금융거래','모든 고위험 고객 거래','모든 카지노 칩거래'],a:0,exp:'위험이 현저히 낮다고 감독기관이 별도로 정하는 거래에 한해 CDD의 전부 또는 일부가 면제될 수 있습니다.'},
+
+{subject:'제도',diff:'최상',type:'single',q:'금융회사 직원이 신규 고객으로부터 계좌개설을 요청받았는데, 고객이 실제소유자 확인서류 제출을 거부하며 \'개인정보 보호\'만을 이유로 협조하지 않는다. 가장 적절한 대응은?',opts:['실제소유자 확인 없이도 계좌를 개설해준다','CDD를 완료할 수 없는 경우 계좌개설을 거절하거나 거래관계를 수립하지 않는 것이 원칙이다','무조건 수사기관에 신고한다','고객을 강제로 협박하여 서류를 받아낸다','개인정보보호법을 이유로 특금법상 의무를 면제해준다'],a:1,exp:'CDD를 완료할 수 없는 경우 계좌개설 거절 등 거래관계 불수립이 국제기준·특금법의 원칙적 대응입니다.'},
+{subject:'제도',diff:'중',type:'single',q:'다음 중 \'거래거절 및 거래관계 종료(Exiting the relationship)\'가 요구되는 일반적 상황으로 가장 적절한 것은?',opts:['CDD를 완료할 수 없거나 자금세탁 위험이 현저히 높다고 판단되는 경우','고객의 거래금액이 적은 경우','고객이 신규 고객인 경우','고객이 외국인인 경우','고객이 여성인 경우'],a:0,exp:'CDD 미완료 또는 현저히 높은 위험이 확인되는 경우, 거래거절 또는 관계종료가 요구될 수 있습니다.'},
+
+{subject:'제도',diff:'하',type:'single',q:'자금세탁방지 관련 \'레드플래그(Red Flag) 지표\'란 무엇인가?',opts:['의심거래를 식별하는 데 참고가 되는 이상 징후·경고 신호','금융회사의 재무제표상 적자 표시','신용카드의 한도 초과 알림','보험 가입 거절 통지','대출 승인 거절 통지'],a:0,exp:'레드플래그 지표는 의심거래 식별에 참고가 되는 이상 징후·경고 신호를 의미합니다.'},
+{subject:'제도',diff:'중',type:'single',q:'카지노 실무에서 활용될 수 있는 레드플래그 지표로 가장 적절한 것은?',opts:['단기간 반복적으로 기준금액에 근접한 칩 구매·환전을 반복하는 패턴','정상적인 게임 참여 후 소액의 승리금을 수령하는 경우','장기 고객이 일정한 패턴으로 소액 거래를 하는 경우','카지노 멤버십 포인트를 정상적으로 적립하는 경우','신분증을 정상적으로 제시하는 경우'],a:0,exp:'기준금액에 근접한 반복적 칩 구매·환전 패턴은 구조화 의심 레드플래그의 대표적 예입니다.'},
+
+{subject:'제도',diff:'중',type:'single',q:'다음 중 자금세탁방지 관련 \'내부고발\' 채널과 \'의심거래보고(STR)\' 채널의 관계로 가장 적절한 것은?',opts:['두 채널은 목적과 절차가 다른 별개의 제도이나, 서로 보완적으로 자금세탁 탐지에 기여할 수 있다','두 채널은 완전히 동일한 절차이다','내부고발 채널이 STR을 대체한다','STR 채널이 내부고발을 대체한다','두 채널은 서로 배타적이어서 동시에 존재할 수 없다'],a:0,exp:'내부고발과 STR은 서로 다른 제도이지만 보완적으로 자금세탁 탐지에 기여할 수 있습니다.'},
+
+{subject:'제도',diff:'상',type:'single',q:'다음 중 \'카지노사업자의 관광진흥법상 허가 취소·정지\'와 \'특금법상 제재\'의 관계에 대한 설명으로 가장 적절한 것은?',opts:['각 법률의 소관 위반사항에 따라 별도로 제재가 이루어질 수 있으며, 한 법률의 제재가 다른 법률의 제재를 자동으로 대체하지 않는다','관광진흥법 위반시 특금법 위반도 자동으로 성립한다','특금법 위반시 관광진흥법 위반도 자동으로 성립한다','두 법률 중 하나만 적용되고 나머지는 적용되지 않는다','카지노는 어느 법률의 제재도 받지 않는다'],a:0,exp:'관광진흥법과 특금법은 각각의 소관 위반사항에 따라 별도로 제재가 이루어질 수 있는 별개의 규율체계입니다.'},
+
+{subject:'제도',diff:'중',type:'single',q:'다음 중 자금세탁방지 관련 \'연차보고(정기국회 보고)\' 제도의 목적으로 가장 적절한 것은?',opts:['금융정보분석원장이 국회에 업무수행 관련 사항을 매년 보고함으로써 투명성과 책임성을 확보하기 위해','금융회사의 예산을 국회가 직접 편성하기 위해','개별 고객의 계좌정보를 국회에 공개하기 위해','카지노의 매출을 국회가 승인하기 위해','국회가 금융회사의 인사를 결정하기 위해'],a:0,exp:'KoFIU는 매년 정기국회에 업무수행 관련 사항을 보고함으로써 투명성·책임성을 확보하도록 규정되어 있습니다.'},
+
+{subject:'제도',diff:'하',type:'single',q:'다음 중 \'건전성 감독(Prudential Supervision)\'과 \'AML/CFT 감독\'의 관계로 가장 적절한 것은?',opts:['두 감독은 목적과 관점이 다르지만 상호 연계되어 운영될 수 있다','두 감독은 완전히 동일한 개념이다','건전성 감독은 자금세탁과 전혀 무관하다','AML/CFT 감독은 재무건전성과 전혀 무관하다','두 감독 중 하나만 존재하면 된다'],a:0,exp:'건전성 감독과 AML/CFT 감독은 목적이 다르지만 상호 연계되어 운영될 수 있습니다.'},
+
+{subject:'제도',diff:'중',type:'single',q:'다음 중 자금세탁방지 관련 국제기준에서 \'효과적인 제재(Effective, Proportionate and Dissuasive Sanctions)\'가 요구하는 것으로 가장 적절한 것은?',opts:['위반의 중대성에 비례하면서도 위반을 억제할 수 있는 실효적인 제재를 갖추어야 한다','제재는 형식적으로만 존재하면 충분하다','제재는 반드시 형사처벌만 가능해야 한다','제재는 국제기준과 무관하게 각국이 자유롭게 정한다','제재는 금융회사에만 적용되고 개인에게는 적용되지 않는다'],a:0,exp:'FATF는 위반의 중대성에 비례하면서도 실효적으로 억제 기능을 하는 제재체계를 요구합니다.'},
+{subject:'제도',diff:'상',type:'multi',q:'다음 중 금융회사등에 부과될 수 있는 제재의 유형을 모두 고르시오.',opts:['과태료','기관경고','영업정지 요구','형사처벌(고의·중대한 과실의 경우)','금융회사의 정관 개정 명령'],a:[0,1,2,3],exp:'과태료, 기관경고, 영업정지 요구, 형사처벌은 특금법상 부과될 수 있는 제재 유형에 해당하지만 정관 개정 명령은 해당하지 않습니다.'},
+
+{subject:'제도',diff:'중',type:'single',q:'다음 중 \'지속가능한 자금세탁방지 체계 구축\'을 위해 국제기준에서 강조하는 요소로 가장 거리가 먼 것은?',opts:['관계기관 간 협력체계 구축','충분한 자원(인력·예산) 배분','국제협력 및 정보교환','지속적인 위험평가 및 정책 갱신','금융회사의 광고비 증액'],a:4,exp:'협력체계, 자원 배분, 국제협력, 지속적 위험평가는 강조되는 요소이지만 광고비 증액은 해당하지 않습니다.'},
+
+{subject:'제도',diff:'하',type:'single',q:'다음 중 \'자금세탁방지 인식 제고(Awareness Raising)\' 활동의 예로 가장 적절한 것은?',opts:['임직원 교육, 대중 홍보자료 배포 등 자금세탁방지에 대한 이해를 높이는 활동','금융상품 판매촉진 이벤트','고객 대상 경품 추첨','주가 부양을 위한 홍보','신용카드 발급 이벤트'],a:0,exp:'인식 제고 활동은 임직원 교육이나 대중 홍보 등을 통해 자금세탁방지에 대한 이해를 높이는 활동을 의미합니다.'},
+
+{subject:'제도',diff:'중',type:'single',q:'다음 중 \'자금세탁방지 관련 국제협력\'의 형태로 가장 거리가 먼 것은?',opts:['FIU 간 정보교환','국가간 범죄인 인도·사법공조','감독당국 간 정보공유','공동 조사·수사 협력','국가간 관세 인하 협상'],a:4,exp:'FIU 간 정보교환, 범죄인 인도, 감독당국 정보공유, 공동조사는 국제협력의 형태이지만 관세 인하 협상은 해당하지 않습니다.'},
+
+{subject:'제도',diff:'최상',type:'single',q:'다음 중 특정금융거래정보법, 범죄수익은닉규제법, 공중협박자금조달금지법 3개 법률이 상호 유기적으로 작동하는 방식을 가장 올바르게 설명한 것은?',opts:['특금법이 예방적 보고·확인체계를 갖추고, 범죄수익은닉규제법이 사후적으로 자금세탁 행위 자체를 처벌·몰수하며, 공중협박자금조달금지법이 테러자금조달을 별도로 규율함으로써 예방-처벌-특수영역 규율이 상호 보완된다','세 법률은 서로 중복되어 하나만 존재해도 충분하다','세 법률은 서로 충돌하여 동시에 적용될 수 없다','세 법률 모두 카지노에는 적용되지 않는다','세 법률 모두 동일한 내용을 반복 규정한 것이다'],a:0,exp:'세 법률은 예방(특금법)-처벌(범죄수익은닉규제법)-특수영역(공중협박자금조달금지법)의 역할을 나누어 상호 보완적으로 작동합니다.'},
+
+{subject:'제도',diff:'중',type:'single',q:'다음 중 자금세탁방지 관련 \'기록보존 의무\'가 필요한 이유로 가장 적절한 것은?',opts:['향후 수사·조사시 거래추적 및 증거자료로 활용하기 위해','금융회사의 광고자료로 활용하기 위해','고객의 개인정보를 판매하기 위해','금융회사의 마케팅 통계 작성을 위해','세금 감면을 받기 위해'],a:0,exp:'기록보존은 향후 수사·조사시 거래를 추적하고 증거자료로 활용할 수 있도록 하기 위한 목적입니다.'},
+
+{subject:'제도',diff:'하',type:'single',q:'다음 중 \'거래모니터링시스템(Transaction Monitoring System)\'의 주된 목적으로 가장 적절한 것은?',opts:['고객의 거래패턴을 자동으로 분석해 이상거래를 탐지하기 위해','금융상품의 수익률을 계산하기 위해','고객의 신용점수를 산정하기 위해','금융회사의 회계처리를 자동화하기 위해','광고 타겟팅을 위해'],a:0,exp:'거래모니터링시스템은 거래패턴을 자동 분석해 이상거래를 탐지하는 것을 주된 목적으로 합니다.'},
+{subject:'제도',diff:'중',type:'single',q:'다음 중 카지노 실무에서 거래모니터링시스템이 특히 주목해야 할 패턴으로 가장 적절한 것은?',opts:['짧은 기간 내 반복적인 고액 칩 구매·환전, 여러 창구를 이용한 분할거래 등','정상적인 시간대의 소액 게임 참여','장기간에 걸친 균일한 소액 이용 패턴','신분증 제시 후 정상 출입','카지노 이용약관 동의'],a:0,exp:'짧은 기간 반복적 고액 칩 거래나 분할거래 패턴은 카지노 모니터링에서 특히 주목해야 할 이상 패턴입니다.'},
+
+{subject:'제도',diff:'상',type:'single',q:'다음 중 \'가상자산사업자(VASP)의 실명확인 입출금계정\' 제도의 취지로 가장 적절한 것은?',opts:['가상자산거래와 관련된 자금흐름을 실명 확인된 계정을 통해 투명하게 관리하기 위해','가상자산 거래를 전면 금지하기 위해','가상자산거래소의 광고를 규제하기 위해','가상자산의 시세를 결정하기 위해','가상자산 채굴을 규제하기 위해'],a:0,exp:'실명확인 입출금계정은 가상자산 관련 자금흐름을 실명 기반으로 투명하게 관리하기 위한 제도입니다.'},
+{subject:'제도',diff:'중',type:'single',q:'다음 중 \'가상자산이용자보호법\'이 다루는 주된 내용으로 가장 적절한 것은?',opts:['이상거래 감지, 예치금 보호, 불공정거래 규제 등 이용자 보호에 초점을 맞춘 법률','특금법을 전면 대체하는 법률','카지노 산업을 규율하는 법률','은행업 인가를 규율하는 법률','보험업을 규율하는 법률'],a:0,exp:'2024.7.19 시행된 가상자산이용자보호법은 이상거래 감지, 예치금 보호 등 이용자 보호에 초점을 맞춘 법률로, 특금법과는 별개의 법률입니다.'},
+
+{subject:'제도',diff:'하',type:'single',q:'다음 중 자금세탁방지 관련 \'지속적 교육·연수\'가 요구되는 대상으로 가장 적절한 것은?',opts:['자금세탁방지 관련 업무를 수행하는 임직원 전반','금융회사의 고객 전체','금융회사의 주주 전체','감독기관의 모든 산업 담당자','관련없는 일반 국민 전체'],a:0,exp:'자금세탁방지 관련 업무를 수행하는 임직원 전반이 지속적 교육·연수의 대상이 됩니다.'},
+{subject:'제도',diff:'중',type:'single',q:'다음 중 자금세탁방지 관련 \'독립적 감사(내부평가)\'의 목적으로 가장 적절한 것은?',opts:['내부통제체계가 실제로 적절히 운영되고 있는지를 독립적으로 점검·평가하기 위해','금융상품의 수익률을 감사하기 위해','직원의 근태를 감사하기 위해','광고비 지출을 감사하기 위해','주주총회 의결권을 감사하기 위해'],a:0,exp:'독립적 감사는 내부통제체계가 실제로 적절히 운영되고 있는지를 독립적으로 점검·평가하기 위한 것입니다.'},
+
+{subject:'제도',diff:'최상',type:'single',q:'카지노 서베일런스 직원이 근무 중, 특정 VIP 고객이 정킷 운영자를 통해 대규모 칩을 구매했는데, 해당 정킷 운영자의 자금출처가 불분명하다는 정보를 접했다. 가장 적절한 대응은?',opts:['별다른 조치 없이 VIP 고객이므로 예외적으로 처리한다','정킷 운영자 및 관련 거래에 대한 강화된 고객확인(EDD) 실시와 함께 필요시 STR 검토를 진행한다','정킷 운영자와의 거래를 무조건 즉시 전면 중단한다','문제를 상급자에게 보고하지 않고 개인적으로 판단해 처리한다','고객의 신분증만 확인하면 충분하다'],a:1,exp:'자금출처가 불분명한 정킷 관련 거래는 대표적 고위험 요인으로, EDD 실시 및 내부보고·STR 검토 절차를 거치는 것이 적절합니다. VIP라는 이유로 예외 처리하는 것은 오히려 위험을 방치하는 결과를 낳습니다.'},
+
+{subject:'제도',diff:'중',type:'single',q:'다음 중 \'위험기반접근법(RBA)\'과 \'규정중심접근법(Rule-based Approach)\'의 차이에 대한 설명으로 가장 적절한 것은?',opts:['RBA는 위험도에 따라 조치를 차등화하고, 규정중심접근법은 사전에 정해진 규칙을 획일적으로 적용한다','두 접근법은 동일하다','규정중심접근법이 현재 국제기준의 유일한 표준이다','RBA는 국내법상 존재하지 않는다','규정중심접근법은 위험평가를 전혀 요구하지 않는다는 점에서 RBA보다 우수하다'],a:0,exp:'RBA는 위험도에 따라 조치 강도를 차등화하는 반면, 규정중심접근법은 사전에 정해진 규칙을 획일적으로 적용하는 방식입니다.'},
+
+{subject:'제도',diff:'상',type:'single',q:'다음 중 자금세탁방지 관련 \'효과적인 이행\'을 저해하는 요인으로 가장 거리가 먼 것은?',opts:['관계기관 간 정보공유 체계 미비','전문인력 및 예산 부족','국제협력체계 미흡','정기적인 위험평가 부재','금융회사의 자금세탁방지 교육 강화'],a:4,exp:'정보공유 미비, 인력·예산 부족, 국제협력 미흡, 위험평가 부재는 효과적 이행을 저해하는 요인이지만, 교육 강화는 오히려 이행을 돕는 요인입니다.'},
+
+{subject:'제도',diff:'최상',type:'single',q:'다음 중 카지노 서베일런스 업무가 자금세탁방지 체계에서 수행하는 역할을 가장 올바르게 설명한 것은?',opts:['카지노 영업장 내 이상거래·의심행위를 관찰·포착해 컴플라이언스 부서의 CDD·STR 판단에 필요한 1차 정보를 제공하는 역할','서베일런스는 자금세탁방지와 무관하게 게임의 공정성만 감시한다','서베일런스가 직접 STR을 KoFIU에 최종 제출한다','서베일런스는 카지노의 마케팅 전략만 담당한다','서베일런스는 법적 근거 없이 임의로 운영되는 부서이다'],a:0,exp:'서베일런스는 영업장 내 이상행위를 관찰·포착하여 컴플라이언스 부서(보고책임자)에 전달하는 1차 정보수집 역할을 수행하며, 최종적으로 STR을 KoFIU에 제출하는 것은 보고책임자를 통한 절차입니다.'},
+
+{subject:'실무',diff:'하',type:'single',q:'CDD 이행 시 가장 먼저 확인해야 하는 항목으로 가장 적절한 것은?',opts:['고객의 성명·주민등록번호(또는 외국인은 여권번호 등) 등 신원정보','고객의 투자성향','고객의 신용점수','고객의 대출한도','고객의 마케팅 수신동의 여부'],a:0,exp:'CDD의 출발점은 성명·주민등록번호(외국인은 여권번호 등) 등 기본 신원정보 확인입니다.'},
+{subject:'실무',diff:'하',type:'single',q:'신규 계좌개설 고객에 대해 실시하는 고객확인 절차에서 통상 확인하지 않는 항목은?',opts:['성명','주민등록번호 또는 여권번호','주소·연락처','거래목적','고객의 정치적 견해'],a:4,exp:'성명·신분번호·주소·연락처·거래목적은 CDD의 기본 확인항목이지만, 고객의 정치적 견해 자체를 확인항목으로 삼지는 않습니다.'},
+{subject:'실무',diff:'중',type:'single',q:'고객이 법인인 경우 CDD 과정에서 개인고객과 달리 추가로 확인해야 하는 사항으로 가장 적절한 것은?',opts:['법인의 실제소유자, 대표자, 법인 등록정보 등','법인의 주가','법인의 임직원 취미','법인의 광고예산','법인의 사무실 인테리어'],a:0,exp:'법인고객은 실제소유자·대표자·등록정보 등을 추가로 확인해야 합니다.'},
+{subject:'실무',diff:'중',type:'single',q:'실제소유자 확인 시 문서(Documentary) 방식과 비문서(Non-documentary) 방식의 차이로 가장 적절한 것은?',opts:['전자는 등기부등본 등 공적 서류를 통한 확인, 후자는 데이터베이스 조회 등 서류 이외의 방법을 통한 확인','두 방식은 동일하다','비문서 방식은 국제기준상 금지된다','문서 방식만 유효하다','두 방식 모두 고객확인과 무관하다'],a:0,exp:'문서 방식은 공적 서류 확인, 비문서 방식은 데이터베이스 조회 등 서류 이외 방법을 활용하는 확인방식입니다.'},
+{subject:'실무',diff:'상',type:'single',q:'다음 중 EDD 실시 승인과 관련해 일반적으로 요구되는 절차로 가장 적절한 것은?',opts:['고위험 고객과의 거래관계 수립·유지에 대해 상급관리자(고위경영진)의 승인을 받도록 하는 절차','EDD는 담당 직원 개인이 임의로 결정하면 된다','EDD는 승인절차 없이 자동으로 적용된다','EDD 승인은 고객 본인이 결정한다','EDD는 승인이 필요 없는 절차다'],a:0,exp:'고위험 고객과의 거래관계 수립·유지는 담당자 개인 판단이 아니라 상급관리자 승인을 거치는 것이 일반적 원칙입니다.'},
+{subject:'실무',diff:'중',type:'single',q:'고위험 고객으로 분류된 경우 통상 요구되는 지속적 고객확인의 재이행 주기로 가장 적절한 것은? (⚠ 회사별 내부정책에 따라 다를 수 있음)',opts:['저위험 고객보다 짧은 주기로 더 자주 재확인','저위험 고객보다 긴 주기로 드물게 확인','재확인이 전혀 불필요','최초 확인 이후 영구히 재확인 불필요','고위험 고객은 재확인 대상에서 제외'],a:0,exp:'고위험 고객은 위험도에 비례하여 저위험 고객보다 더 자주 재확인하는 것이 위험기반접근법의 기본 원칙입니다.'},
+{subject:'실무',diff:'하',type:'single',q:'CTR(고액현금거래보고) 대상 거래를 판단할 때 기준이 되는 \'동일인\'의 의미로 가장 적절한 것은?',opts:['동일한 실명확인 대상자를 의미하며, 명의를 분산해도 실질적으로 동일인이 한 거래는 합산될 수 있다','서로 다른 사람이라도 같은 은행을 이용하면 동일인으로 본다','동일인은 법인에만 적용되는 개념이다','동일인 여부는 판단할 필요가 없다','동일인은 반드시 가족관계여야 한다'],a:0,exp:'동일인은 실명확인 대상자를 기준으로 판단하며, 명의를 분산해도 실질적으로 동일인의 거래는 합산 판단될 수 있습니다.'},
+{subject:'실무',diff:'중',type:'single',q:'카지노 칩거래와 관련해 실무적으로 \'분할거래(구조화)\' 의심 정황을 포착하는 방법으로 가장 적절한 것은?',opts:['동일 고객의 여러 창구·시간대 거래를 통합해 모니터링하는 시스템을 통해 반복적 근접 거래를 탐지','각 창구의 거래를 서로 연계하지 않고 개별적으로만 관리','고객의 신분증만 확인하고 거래내역은 확인하지 않음','구조화는 시스템으로 탐지할 수 없으므로 별도 조치 불필요','구조화는 카지노에는 발생하지 않으므로 모니터링 불필요'],a:0,exp:'여러 창구·시간대 거래를 통합 모니터링해야 분할거래(구조화) 패턴을 효과적으로 탐지할 수 있습니다.'},
+{subject:'실무',diff:'중',type:'single',q:'의심거래보고(STR)서 작성 시 포함되어야 하는 핵심 내용으로 가장 적절한 것은?',opts:['의심되는 사유, 관련 거래내역, 고객정보 등 구체적 사실관계','개인적 추측이나 의견 위주의 서술','고객에 대한 비방','보고자의 개인 신상정보 위주 서술','무관한 타 고객 정보'],a:0,exp:'STR은 구체적 사실관계(의심사유, 거래내역, 고객정보)에 기반해 작성해야 합니다.'},
+{subject:'실무',diff:'상',type:'single',q:'STR 보고 품질을 높이기 위한 실무적 개선방향으로 가장 적절한 것은?',opts:['의심 사유를 구체적 사실과 거래패턴에 근거해 명확히 기술하고, 정형화된 문구 반복을 피한다','최대한 짧게 한 줄로만 작성한다','의심 사유 없이 형식적으로 제출한다','동일한 문구를 모든 보고서에 복사해 사용한다','보고서 작성은 연 1회만 하면 충분하다'],a:0,exp:'실제 감독기관은 의심거래보고 품질제고를 지속적으로 강조하고 있으며, 구체적 사실관계에 기반한 서술이 중요합니다.'},
+
+{subject:'실무',diff:'하',type:'single',q:'고객확인(CDD) 과정에서 \'거래목적\' 확인이 필요한 이유로 가장 적절한 것은?',opts:['고객의 거래가 정상적인 목적에 부합하는지 판단해 이상거래 여부를 평가하는 데 참고하기 위해','세금을 부과하기 위해','광고를 타겟팅하기 위해','대출한도를 정하기 위해','신용카드 한도를 정하기 위해'],a:0,exp:'거래목적 확인은 거래의 정상성을 판단하는 기초 정보로 활용됩니다.'},
+{subject:'실무',diff:'중',type:'single',q:'카지노에서 고객이 \'사업자금\'이라고 밝히며 대규모 칩을 구매하려는 경우, 실무적으로 가장 적절한 대응은?',opts:['거래목적과 자금출처의 정합성을 확인하고 필요시 추가 증빙을 요청하는 등 CDD를 강화한다','설명만 듣고 별다른 확인 없이 진행한다','거래를 무조건 거절한다','고객의 설명을 믹지 않고 일단 신고한다','사업자금이라는 말만으로 저위험으로 자동 분류한다'],a:0,exp:'고객의 설명을 그대로 받아들이기보다 자금출처와의 정합성을 확인하는 것이 적절한 CDD 강화 조치입니다.'},
+{subject:'실무',diff:'중',type:'single',q:'고객위험등급(Customer Risk Rating)을 산정할 때 통상적으로 고려되는 요소로 가장 거리가 먼 것은?',opts:['고객의 직업·사업 특성','거래 규모 및 패턴','거래 국가·지역','PEP 여부','고객의 외모'],a:4,exp:'직업·사업특성, 거래규모·패턴, 거래국가, PEP 여부는 위험등급 산정요소이지만 외모는 해당하지 않습니다.'},
+{subject:'실무',diff:'중',type:'multi',q:'고객위험등급 산정시 일반적으로 고려하는 요소를 모두 고르시오.',opts:['직업·사업 특성','거래 규모 및 패턴','거래 국가·지역','PEP 여부','고객의 성별'],a:[0,1,2,3],exp:'직업·사업특성, 거래규모·패턴, 거래국가, PEP 여부가 대표적 고려요소이며, 성별은 해당하지 않습니다.'},
+{subject:'실무',diff:'상',type:'single',q:'다음 중 \'이상거래 알림(Alert)\'이 발생했을 때 실무적으로 취해야 할 첫 단계로 가장 적절한 것은?',opts:['알림 내용을 검토해 정당한 사유가 있는지, 추가 조사가 필요한지를 1차적으로 확인(트리아지)한다','알림을 즉시 삭제한다','알림 발생 여부와 무관하게 고객 계좌를 바로 해지한다','알림은 무시하고 다음 알림을 기다린다','알림 내용을 고객에게 바로 통지한다'],a:0,exp:'알림 발생시 먼저 정당한 사유 여부와 추가조사 필요성을 판단하는 트리아지 단계를 거칩니다.'},
+{subject:'실무',diff:'중',type:'single',q:'거래모니터링시스템에서 발생하는 \'오탐(False Positive)\'에 대한 설명으로 가장 적절한 것은?',opts:['실제로는 의심거래가 아니지만 시스템이 이상거래로 판단해 알림을 생성한 경우','실제 의심거래인데 시스템이 놓친 경우','시스템 오류로 데이터가 손실된 경우','고객이 허위 정보를 제공한 경우','보고서를 제출하지 않은 경우'],a:0,exp:'오탐은 실제로는 정상거래인데 시스템이 이상거래로 잘못 판단한 경우를 의미합니다.'},
+{subject:'실무',diff:'중',type:'single',q:'오탐(False Positive) 비율이 지나치게 높을 경우 발생할 수 있는 실무적 문제로 가장 적절한 것은?',opts:['담당 인력의 알림 처리 부담이 커져 실제 의심거래 식별의 효율성이 저하될 수 있다','오탐이 많을수록 감독기관의 평가가 항상 좋아진다','오탐은 실무에 아무 영향이 없다','오탐이 많으면 시스템을 즉시 폐기해야 한다','오탐은 법적으로 금지되어 있다'],a:0,exp:'과도한 오탐은 처리 부담을 키워 실제 의심거래 식별 효율을 떨어뜨릴 수 있습니다.'},
+{subject:'실무',diff:'하',type:'single',q:'제재대상자 명단(Sanctions List) 스크리닝은 통상 언제 실시하는 것이 바람직한가?',opts:['신규 고객 등록시 및 명단 갱신시마다 기존 고객 데이터베이스도 재스크리닝','신규 고객 등록시에만 1회 실시하고 이후 다시 하지 않음','연 1회만 실시','고객이 요청할 때만 실시','제재대상자 명단은 스크리닝 대상이 아님'],a:0,exp:'신규 등록시와 명단 갱신시마다 기존 고객 데이터베이스도 재스크리닝하는 것이 바람직합니다.'},
+{subject:'실무',diff:'중',type:'single',q:'제재대상자 명단 스크리닝에서 \'유사명 매칭(Fuzzy Matching)\'이 활용되는 이유는?',opts:['표기 오류나 이름의 다양한 표기방식으로 인한 누락을 방지하기 위해','정확히 일치하는 이름만 찾기 위해','스크리닝 속도를 늦추기 위해','고객 수를 줄이기 위해','데이터베이스 용량을 늘리기 위해'],a:0,exp:'유사명 매칭은 표기 차이로 인한 누락을 방지해 스크리닝의 정확도를 높이기 위해 활용됩니다.'},
+{subject:'실무',diff:'하',type:'single',q:'신분증 확인시 위변조 여부를 의심할 수 있는 정황으로 가장 적절한 것은?',opts:['사진과 실물의 불일치, 발급기관 표기 오류, 재질의 이상 등','신분증이 최신 발급본인 경우','신분증에 사진이 부착되어 있는 경우','신분증에 이름이 한글로 기재된 경우','신분증이 카드형인 경우'],a:0,exp:'사진 불일치, 발급기관 표기 오류, 재질 이상 등이 위변조를 의심할 수 있는 대표적 정황입니다.'},
+
+{subject:'실무',diff:'중',type:'single',q:'비대면(온라인) 고객확인 시 대면 확인과 달리 추가로 고려해야 하는 위험요소로 가장 적절한 것은?',opts:['본인 확인의 신뢰도가 낮아질 수 있어 보완적 인증수단(영상통화, 소액이체 인증 등)이 필요할 수 있다','비대면은 대면보다 항상 더 안전하다','비대면 확인은 국제기준상 금지된다','비대면 고객은 항상 저위험으로 분류된다','비대면 확인은 확인 절차 자체가 불필요하다'],a:0,exp:'비대면 확인은 본인확인 신뢰도가 낮아질 수 있어 영상통화, 소액이체 인증 등 보완수단이 필요할 수 있습니다.'},
+{subject:'실무',diff:'중',type:'single',q:'다음 중 카지노 실무에서 \'데드 칩(Dead Chip)\' 또는 논네고셔블 칩(Non-negotiable Chip) 프로그램과 관련해 주의할 위험으로 가장 적절한 것은?',opts:['일반 칩과 달리 현금화 규정이 다를 수 있어 이를 악용한 변칙적 자금이동 가능성','일반 칩과 완전히 동일해 위험이 없음','논네고셔블 칩은 은행에서만 발행','논네고셔블 칩은 국제기준과 무관','논네고셔블 칩은 항상 저위험'],a:0,exp:'논네고셔블 칩은 현금화 규정이 일반 칩과 다를 수 있어 이를 악용한 변칙적 자금이동 가능성에 유의해야 합니다.'},
+{subject:'실무',diff:'상',type:'single',q:'카지노 VIP룸 운영과 관련해 자금세탁방지 관점에서 강화해야 할 통제로 가장 적절한 것은?',opts:['VIP룸 이용 고객에 대한 강화된 고객확인(EDD) 및 거래 모니터링','VIP룸은 일반 구역보다 통제를 완화','VIP룸 이용 고객은 확인절차 면제','VIP룸은 모니터링 대상에서 제외','VIP룸 운영은 자금세탁방지와 무관'],a:0,exp:'VIP룸은 고액거래가 집중되는 만큼 오히려 EDD 및 모니터링을 강화해야 하는 구역입니다.'},
+{subject:'실무',diff:'중',type:'single',q:'카지노 크레딧(마커, Marker) 발급과 관련해 자금세탁방지 측면에서 유의할 점으로 가장 적절한 것은?',opts:['크레딧 발급·상환 과정에서의 자금출처 및 상환방식을 확인해 비정상적 자금흐름을 점검할 필요가 있다','크레딧은 무조건 발급을 금지해야 한다','크레딧 발급에는 확인절차가 필요 없다','크레딧은 자금세탁과 무관하다','크레딧 상환은 확인할 필요가 없다'],a:0,exp:'마커 발급·상환 과정에서 자금출처·상환방식을 확인하는 것이 자금세탁방지 측면에서 중요합니다.'},
+{subject:'실무',diff:'중',type:'single',q:'카지노 캐셔(Cage) 운영에서 자금세탁방지를 위한 통제로 가장 적절한 것은?',opts:['칩-현금 교환 내역의 기록·보존 및 기준금액 이상 거래에 대한 고객확인 절차 이행','캐셔 운영은 확인 절차와 무관','캐셔는 현금거래 내역을 기록하지 않아도 됨','캐셔는 감독기관의 검사 대상이 아님','캐셔 운영자는 CDD 교육이 필요 없음'],a:0,exp:'칩-현금 교환 내역 기록·보존과 기준금액 이상 거래시 CDD 이행이 캐셔 운영의 핵심 통제입니다.'},
+
+{subject:'실무',diff:'하',type:'single',q:'카지노 이용 고객이 여러 명의 다른 사람들에게 칩을 나누어 전달받은 뒤 환전하는 행위(일명 \'칩 워킹\')는 어떤 위험과 관련되는가?',opts:['칩을 이용한 가치이전을 통해 자금출처를 숨기려는 자금세탁 기법일 수 있다','정상적인 게임 참여 방식에 불과하다','자금세탁방지와 무관한 게임 규칙 위반일 뿐이다','카지노 마케팅 프로모션의 일부이다','카지노 종사자의 복지제도이다'],a:0,exp:'칩 워킹은 칩의 가치이전성을 이용해 자금출처를 숨기려는 대표적 자금세탁 우려 행위입니다.'},
+{subject:'실무',diff:'중',type:'single',q:'다음 중 정킷(Junket) 운영자를 통한 고객 유치 구조에서 카지노가 취해야 할 실무적 조치로 가장 적절한 것은?',opts:['정킷 운영자 및 그를 통해 유치된 고객에 대한 CDD·EDD를 병행하고 자금출처를 확인한다','정킷 운영자에게 CDD 책임을 전적으로 위임하고 카지노는 확인하지 않는다','정킷을 통한 고객은 자동으로 저위험으로 분류한다','정킷 운영자에 대한 확인은 불필요하다','정킷 관련 거래는 모니터링 대상에서 제외한다'],a:0,exp:'정킷 운영자 및 유치 고객 모두에 대해 CDD·EDD를 병행 실시하는 것이 카지노의 실무적 책임입니다.'},
+{subject:'실무',diff:'상',type:'single',q:'다음 중 카지노에서 발생할 수 있는 자금세탁 유형 중 \'외국인 관광객을 이용한 세탁\'에 대한 설명으로 가장 적절한 것은?',opts:['불법자금을 소지한 자가 관광객으로 위장해 칩을 구매·환전함으로써 자금출처를 위장하려는 시도','모든 외국인 관광객은 위험하다고 간주해야 한다','외국인 관광객은 확인이 필요 없다','외국인 관광객은 국내법 적용 대상이 아니다','외국인 관광객 이용은 항상 합법적이다'],a:0,exp:'관광객으로 위장해 칩 구매·환전을 반복하며 자금출처를 세탁하려는 시도가 대표적 유형으로 다뤄집니다. 다만 모든 외국인 관광객을 위험하다고 일반화하는 것은 과도한 접근입니다.'},
+
+{subject:'실무',diff:'중',type:'single',q:'다음 중 외국환거래와 관련해 현금을 휴대하고 출입국할 때 세관에 신고해야 하는 기준금액과 관련된 설명으로 가장 적절한 것은? (⚠ 최신 규정 대조 필요)',opts:['일정 금액(미화 1만불 상당) 이상의 현금 등을 휴대하고 출입국하는 경우 세관에 신고할 의무가 있다','모든 현금 휴대는 무조건 금지된다','신고의무는 내국인에게만 적용된다','신고의무는 카지노 이용자에게는 적용되지 않는다','신고의무는 존재하지 않는다'],a:0,exp:'미화 1만불 상당 이상의 현금 등을 휴대하고 출입국하는 경우 세관 신고의무가 발생하는 것으로 다뤄집니다. 정확한 기준은 최신 관세법령으로 재확인하세요.'},
+{subject:'실무',diff:'하',type:'single',q:'다음 중 외화 환전과 관련해 자금세탁방지 관점에서 확인이 필요한 이유로 가장 적절한 것은?',opts:['대규모 환전이 자금이동·세탁에 이용될 수 있어 출처 확인이 필요하기 때문','환전은 항상 무해한 거래이기 때문에 확인이 불필요','환전은 국제기준과 무관','환전은 카지노에서는 발생하지 않음','환전은 세금과만 관련된 문제'],a:0,exp:'대규모 환전은 자금이동·세탁 수단으로 이용될 수 있어 출처 확인이 필요합니다.'},
+
+{subject:'실무',diff:'중',type:'single',q:'다음 중 \'내부보고(Internal Reporting)\' 체계에서 지점(창구) 직원이 이상거래를 인지했을 때 취해야 할 절차로 가장 적절한 것은?',opts:['정해진 내부 절차에 따라 보고책임자(컴플라이언스 부서)에게 신속히 보고한다','직접 KoFIU에 개별적으로 보고한다','상급자에게 보고하지 않고 스스로 판단해 종결한다','이상거래는 보고하지 않고 방치한다','고객에게 먼저 확인한 뒤 보고 여부를 결정한다'],a:0,exp:'창구 직원은 개별적으로 KoFIU에 보고하는 것이 아니라, 내부 절차에 따라 보고책임자에게 신속히 보고합니다.'},
+{subject:'실무',diff:'하',type:'single',q:'다음 중 내부보고 이후 보고책임자가 수행하는 역할로 가장 적절한 것은?',opts:['내부보고 내용을 심사·분석해 KoFIU에 대한 최종 STR 제출 여부를 결정','내부보고 내용을 무조건 폐기','내부보고를 고객에게 통지','내부보고 내용을 외부에 공개','내부보고는 검토 없이 자동으로 제출'],a:0,exp:'보고책임자는 내부보고 내용을 심사·분석해 최종 STR 제출 여부를 결정하는 역할을 수행합니다.'},
+
+{subject:'실무',diff:'중',type:'single',q:'다음 중 카지노 종사자에 대한 자금세탁방지 교육에서 다뤄야 할 핵심 내용으로 가장 적절한 것은?',opts:['레드플래그 식별법, 내부보고 절차, 관련 법규상 의무 등','카지노 게임 규칙만','마케팅 기법만','고객 응대 매너만','카지노 시설 관리 방법만'],a:0,exp:'레드플래그 식별법, 내부보고 절차, 법규상 의무 등이 자금세탁방지 교육의 핵심 내용입니다.'},
+{subject:'실무',diff:'하',type:'single',q:'다음 중 자금세탁방지 교육의 실시 주기에 대한 일반적 원칙으로 가장 적절한 것은?',opts:['정기적·지속적으로 실시하며 신규 입사자에 대해서는 별도의 초기 교육을 실시한다','1회만 실시하면 충분하다','교육은 관리자만 받으면 충분하다','교육은 법적으로 요구되지 않는다','교육은 감독기관이 직접 실시해야만 유효하다'],a:0,exp:'정기적·지속적 교육과 신규 입사자 대상 초기 교육이 일반적 원칙입니다.'},
+
+{subject:'실무',diff:'상',type:'single',q:'다음 중 \'독립적 평가(내부감사)\'에서 점검하는 항목으로 가장 적절한 것은?',opts:['CDD·STR·CTR 등 실제 이행 현황이 내부정책과 관련 법규에 부합하는지 여부','금융상품의 판매실적','직원의 근태기록','광고 집행 내역','사무실 시설 관리 상태'],a:0,exp:'독립적 평가는 CDD·STR·CTR 등 실제 이행이 내부정책·법규에 부합하는지를 점검합니다.'},
+{subject:'실무',diff:'중',type:'single',q:'다음 중 \'위험평가(Risk Assessment)\'를 정기적으로 갱신해야 하는 이유로 가장 적절한 것은?',opts:['고객군·상품·거래환경의 변화에 따라 위험도가 달라질 수 있기 때문','위험평가는 한 번 실시하면 영구히 유효하기 때문','위험평가는 형식적 절차에 불과하기 때문','위험평가는 감독기관만 실시하면 되기 때문','위험평가는 법적 의무가 아니기 때문'],a:0,exp:'고객군·상품·거래환경 변화에 따라 위험도가 달라질 수 있어 정기적 갱신이 필요합니다.'},
+
+{subject:'실무',diff:'중',type:'single',q:'다음 중 카지노 사업장에서 CCTV 등 감시장비 운영이 자금세탁방지 실무에 기여하는 방식으로 가장 적절한 것은?',opts:['이상행위를 시각적으로 포착해 서베일런스 부서가 컴플라이언스 판단에 필요한 근거자료를 확보하도록 지원','CCTV는 자금세탁방지와 전혀 무관','CCTV는 마케팅 자료 제작에만 사용','CCTV는 게임 결과 조작 방지에만 사용','CCTV 영상은 보존할 필요가 없음'],a:0,exp:'CCTV는 이상행위를 시각적으로 포착해 컴플라이언스 판단의 근거자료를 확보하도록 지원합니다.'},
+{subject:'실무',diff:'하',type:'single',q:'다음 중 서베일런스 부서가 포착한 이상행위 정보를 처리하는 일반적 흐름으로 가장 적절한 것은?',opts:['서베일런스 관찰·기록 → 컴플라이언스(보고책임자) 전달 → 내부심사·분석 → 필요시 STR 제출','서베일런스가 직접 KoFIU에 제출','서베일런스가 고객에게 직접 통지','서베일런스 정보는 활용되지 않음','서베일런스는 경찰에만 보고'],a:0,exp:'서베일런스 관찰·기록이 컴플라이언스에 전달되고, 심사·분석을 거쳐 필요시 STR로 이어지는 흐름이 일반적입니다.'},
+
+{subject:'실무',diff:'중',type:'single',q:'다음 중 자금세탁방지 관련 \'기록 접근 통제\'가 필요한 이유로 가장 적절한 것은?',opts:['고객정보 및 보고자료의 유출·오남용을 방지하고 tipping-off를 예방하기 위해','기록 접근은 아무런 통제가 필요 없기 때문','기록은 모든 직원이 자유롭게 열람해야 하기 때문','기록 접근 통제는 국제기준과 무관','기록은 접근통제 없이 외부에 공개해야 하기 때문'],a:0,exp:'기록 접근 통제는 정보 유출·오남용 방지 및 tipping-off 예방을 위해 필요합니다.'},
+{subject:'실무',diff:'하',type:'single',q:'다음 중 \'고객확인 정보의 최신화(Update)\'가 필요한 상황으로 가장 적절한 것은?',opts:['고객의 주소·직업 등 정보 변경이 확인되거나 거래패턴이 유의미하게 변화한 경우','고객정보는 최초 확인 후 다시 갱신할 필요가 없는 경우','고객이 요청하지 않는 한 절대 갱신하지 않는 경우','고객정보 갱신은 금지되어 있는 경우','고객정보는 감독기관만 갱신할 수 있는 경우'],a:0,exp:'고객정보 변경이나 거래패턴의 유의미한 변화가 확인되면 정보를 최신화해야 합니다.'},
+
+{subject:'실무',diff:'중',type:'single',q:'다음 중 자금세탁방지 관련 \'이상거래 조사(Investigation)\' 과정에서 문서화해야 하는 내용으로 가장 적절한 것은?',opts:['조사 경위, 확인된 사실, 판단 근거 및 최종 결론 등을 체계적으로 기록','조사자의 개인적 감정','무관한 타 고객의 정보','조사 내용은 문서화할 필요가 없음','조사 결과는 구두로만 전달하면 충분함'],a:0,exp:'조사 경위·사실·판단근거·결론을 체계적으로 문서화하는 것이 실무상 원칙입니다.'},
+{subject:'실무',diff:'상',type:'single',q:'다음 중 STR을 제출하기로 결정한 이후에도 고객과의 거래관계를 즉시 종료하지 않는 경우가 있는 이유로 가장 적절한 것은?',opts:['거래관계를 갑작스럽게 종료하면 tipping-off로 이어지거나 추가 정보 수집 기회를 상실할 위험이 있어, 상황에 따라 신중히 판단해야 하기 때문','STR 제출 후에는 반드시 즉시 거래를 종료해야 하기 때문에 이 설명은 항상 틀리다','거래종료는 법적으로 금지되어 있기 때문','STR과 거래종료는 아무 관련이 없기 때문','거래관계 종료는 고객의 동의가 있어야만 가능하기 때문'],a:0,exp:'갑작스런 거래종료는 tipping-off 우려나 추가정보 수집 기회 상실로 이어질 수 있어 상황에 따라 신중한 판단이 필요합니다.'},
+
+{subject:'실무',diff:'중',type:'single',q:'다음 중 감독기관의 현장검사에 대응하는 금융회사(카지노 포함)의 실무적 준비사항으로 가장 적절한 것은?',opts:['CDD·STR·CTR 관련 기록의 정리·보관 상태를 점검하고 관련 내부정책·교육이력을 준비','검사 직전에만 형식적으로 서류를 급조','검사에는 아무 준비가 필요 없음','검사 대응은 법무팀만 담당하고 실무부서는 무관','검사 결과는 공개하지 않아도 무방'],a:0,exp:'CDD·STR·CTR 기록 및 내부정책·교육이력 정리가 현장검사 대응의 핵심 준비사항입니다.'},
+{subject:'실무',diff:'하',type:'single',q:'다음 중 자금세탁방지 관련 \'시정명령\'을 받은 경우 금융회사가 취해야 할 조치로 가장 적절한 것은?',opts:['정해진 기한 내에 지적사항을 개선하고 이행결과를 보고','시정명령을 무시해도 무방','시정명령에 대해 이의제기는 불가능','시정명령은 참고사항일 뿐 이행 의무가 없음','시정명령은 감독기관 내부문서로만 처리됨'],a:0,exp:'시정명령을 받은 경우 정해진 기한 내 개선 및 이행결과 보고가 요구됩니다.'},
+
+{subject:'실무',diff:'중',type:'single',q:'다음 중 자금세탁방지 관련 \'위험기반 감독(Risk-based Supervision)\'이 의미하는 것은?',opts:['감독기관이 피감기관의 위험도에 따라 검사 주기·강도를 차등화하는 감독방식','모든 피감기관에 동일한 검사를 실시하는 방식','위험도와 무관하게 무작위로 검사대상을 선정하는 방식','검사를 전혀 실시하지 않는 방식','피감기관이 스스로 검사 여부를 결정하는 방식'],a:0,exp:'위험기반 감독은 피감기관의 위험도에 따라 검사 주기·강도를 차등화하는 방식입니다.'},
+
+{subject:'실무',diff:'최상',type:'single',q:'카지노 캐셔 직원이 한 고객으로부터 대량의 소액권 현금(예: 1만원권 다발)으로 고액의 칩을 구매하겠다는 요청을 받았다. 가장 적절한 대응은?',opts:['정상적인 고객확인 절차(CDD)를 이행하고 필요시 자금출처를 확인하며, 기준금액 이상이면 CTR 대상 여부를 검토한다','소액권이라는 이유만으로 거래를 거절한다','추가 확인 없이 즉시 거래를 처리한다','소액권 거래는 신고 대상이 아니므로 무시한다','고객에게 소액권을 다른 화폐로 바꿔오라고 요구할 법적 근거가 있다고 안내한다'],a:0,exp:'소액권 대량 현금이라는 사실 자체는 거절 사유가 아니라 CDD·자금출처 확인·CTR 대상 여부 검토 등 정상적인 절차를 이행해야 하는 계기가 됩니다.'},
+
+{subject:'실무',diff:'중',type:'single',q:'다음 중 \'고객확인 거절\'과 \'거래 거절\'의 관계에 대한 실무적 설명으로 가장 적절한 것은?',opts:['고객이 CDD에 필요한 정보·서류 제공을 거부하는 경우, 금융회사는 해당 거래를 거절하거나 거래관계를 수립하지 않을 수 있다','고객이 CDD를 거부해도 거래는 반드시 처리해야 한다','CDD 거부와 거래 거절은 아무 관련이 없다','CDD 거부시 무조건 수사기관에 신고해야 한다','CDD 거부는 발생할 수 없는 상황이다'],a:0,exp:'CDD에 필요한 정보·서류 제공을 거부하는 경우, 거래 거절 또는 거래관계 불수립이 가능합니다.'},
+
+{subject:'실무',diff:'하',type:'single',q:'다음 중 자금세탁방지 관련 \'문서 보관 형식\'으로 허용되는 방식으로 가장 적절한 것은?',opts:['문서, 마이크로필름, 디스크, 전산정보처리조직 등 다양한 방식으로 보관 가능','반드시 종이문서로만 보관해야 함','전자적 보관은 허용되지 않음','보관 형식에는 아무 규정이 없음','보관은 구두 기억으로 충분함'],a:0,exp:'문서, 마이크로필름, 디스크, 전산정보처리조직 등 다양한 방식의 보관이 허용됩니다.'},
+
+{subject:'실무',diff:'중',type:'single',q:'다음 중 카지노 실무에서 \'동일 고객의 여러 카지노 사업장 이용 내역\'을 통합 관리하는 것이 중요한 이유로 가장 적절한 것은?',opts:['한 사업장에서는 기준금액 미달이더라도 여러 사업장을 합산하면 유의미한 거래패턴이 드러날 수 있기 때문','각 사업장은 완전히 독립적이라 통합 관리가 불필요하기 때문','통합 관리는 개인정보 침해이므로 금지되기 때문','통합 관리는 국제기준과 무관하기 때문','고객은 한 사업장만 이용하므로 통합 관리가 무의미하기 때문'],a:0,exp:'개별 사업장에서는 기준금액 미달이더라도 여러 사업장을 합산하면 유의미한 패턴이 드러날 수 있어 통합 관리가 중요합니다.'},
+
+{subject:'실무',diff:'최상',type:'single',q:'카지노 서베일런스·캐셔·컴플라이언스 부서 간 정보공유 체계가 미흡할 경우 발생할 수 있는 가장 큰 실무적 위험은?',opts:['부서별로 파악한 이상행위 정보가 통합되지 못해 반복적·분할적 자금세탁 시도를 종합적으로 탐지하지 못할 위험','각 부서의 업무 부담이 줄어드는 장점만 발생','정보공유 미흡은 실무에 아무 영향이 없음','정보공유는 법적으로 금지되어 있으므로 미흡한 것이 오히려 적절함','정보공유 체계는 카지노 운영과 무관'],a:0,exp:'부서간 정보단절은 개별적으로는 작아 보이는 이상행위들을 종합적으로 파악하지 못하게 해 자금세탁 탐지의 실효성을 떨어뜨리는 대표적 위험입니다.'},
+{subject:'실무',diff:'중',type:'single',q:'전신송금(Wire Transfer) 처리시 송금인 정보 중 필수적으로 확인해야 하는 항목으로 가장 적절한 것은?',opts:['성명, 계좌번호, 주소 또는 주민번호 등 식별정보','수취인의 취미','수취인의 SNS 계정','송금인의 혈액형','수취인의 종교'],a:0,exp:'전신송금시 송금인의 성명, 계좌번호, 주소 또는 주민번호 등 식별정보 확인이 필요합니다.'},
+{subject:'실무',diff:'중',type:'single',q:'국내외 전신송금시 수취기관이 송금인 정보가 불충분하다고 판단할 경우 취해야 할 조치로 가장 적절한 것은?',opts:['정보 보완을 요청하거나, 보완되지 않으면 거래를 거절하거나 보류하는 등의 조치를 취한다','정보 부족 여부와 무관하게 거래를 즉시 처리한다','수취기관은 송금인 정보를 확인할 의무가 없다','정보 부족은 무시하고 진행해도 된다','수취기관은 반드시 거래를 거절해야만 한다'],a:0,exp:'정보가 불충분한 경우 보완을 요청하고, 보완되지 않으면 거절·보류 등의 조치를 취하는 것이 원칙입니다.'},
+{subject:'실무',diff:'중',type:'single',q:'환거래은행(Correspondent Banking) 관계에서 정기적으로 재점검(Periodic Review)해야 하는 이유로 가장 적절한 것은?',opts:['상대 은행의 소유구조, 감독현황, AML 통제수준 등이 시간이 지나며 변화할 수 있기 때문','최초 실사만으로 영구히 충분하기 때문','재점검은 국제기준과 무관하기 때문','재점검은 상대 은행이 요청할 때만 하면 되기 때문','재점검은 감독기관만 수행하는 절차이기 때문'],a:0,exp:'상대 은행의 소유구조·감독현황·AML 통제수준은 시간이 지나며 변화할 수 있어 정기 재점검이 필요합니다.'},
+{subject:'실무',diff:'상',type:'single',q:'환거래 계좌를 통해 제3자가 우회적으로 거래하는 \'Nested\' 관계를 실무적으로 식별하는 방법으로 가장 적절한 것은?',opts:['거래패턴 분석 및 상대 은행에 대한 질의를 통해 실제 이용주체를 확인','모든 환거래 계좌를 무조건 동일하게 취급','Nested 관계는 식별이 불가능하므로 포기','상대 은행에 질의하는 것은 금지됨','거래패턴 분석은 필요 없음'],a:0,exp:'거래패턴 분석과 상대 은행에 대한 질의를 통해 실제 이용주체를 확인하는 것이 Nested 관계 식별의 실무적 방법입니다.'},
+{subject:'실무',diff:'중',type:'single',q:'가상자산사업자(VASP)가 트래블룰 이행을 위해 실무적으로 갖춰야 하는 것으로 가장 적절한 것은?',opts:['이전 거래시 송수신인 정보를 상대 VASP와 교환할 수 있는 솔루션·시스템','트래블룰은 시스템 없이 구두로만 이행 가능','트래블룰은 국내 VASP 간에만 적용되므로 해외 이전에는 불필요','트래블룰 이행은 자율사항으로 시스템이 필요 없음','트래블룰은 이용자에게만 책임이 있음'],a:0,exp:'트래블룰 이행을 위해서는 상대 VASP와 송수신인 정보를 교환할 수 있는 솔루션·시스템 구축이 필요합니다.'},
+{subject:'실무',diff:'중',type:'single',q:'다음 중 가상자산 이전시 상대방이 미신고 해외 거래소 등 트래블룰 미이행 사업자인 경우 실무적으로 가장 적절한 대응은?',opts:['이전 자체를 제한하거나 추가 확인 등 강화된 조치를 취하는 방안을 검토한다','아무 조치 없이 이전을 그대로 처리한다','미신고 사업자와의 거래는 오히려 우대한다','이전 자체를 확인할 필요가 없다','트래블룰은 국내 이전에만 적용되므로 무관하다'],a:0,exp:'미신고·트래블룰 미이행 사업자와의 거래는 고위험으로 평가되어 제한 또는 강화된 조치가 검토되어야 합니다.'},
+{subject:'실무',diff:'상',type:'single',q:'다음 중 \'소스 오브 펀드(Source of Funds)\' 확인을 위한 증빙자료로 가장 적절하지 않은 것은?',opts:['급여내역서, 사업소득 증빙, 부동산 매매계약서 등','고객이 임의로 작성한 메모 한 장','은행 계좌 거래내역서','세금 신고 자료','사업자등록증 및 재무제표'],a:1,exp:'급여내역서, 사업소득 증빙, 계약서, 세금신고자료 등은 유효한 증빙이지만, 고객이 임의로 작성한 메모는 신뢰할 수 있는 증빙자료로 보기 어렵습니다.'},
+{subject:'실무',diff:'중',type:'single',q:'고액자산가 고객의 자금출처 확인시 여러 증빙자료를 함께 검토하는 이유로 가장 적절한 것은?',opts:['단일 자료만으로는 자금출처의 정합성을 충분히 확인하기 어려울 수 있기 때문','증빙자료는 하나만 있으면 항상 충분하기 때문','증빙자료 검토는 시간 낭비이기 때문','고액자산가는 증빙자료 제출 의무가 없기 때문','증빙자료는 위조가 불가능하기 때문'],a:0,exp:'단일 자료만으로는 정합성 확인이 부족할 수 있어 여러 자료를 교차 검토하는 것이 바람직합니다.'},
+{subject:'실무',diff:'하',type:'single',q:'다음 중 \'고객확인 갱신(Periodic Review)\'의 트리거(계기)로 가장 적절한 것은?',opts:['고객 위험등급 상향, 이상거래 발생, 정보 만료 등','고객이 단순히 창구를 방문한 경우','고객이 안내문을 받은 경우','특별한 계기 없이 정기적으로만 갱신','갱신은 트리거 없이 임의로 결정'],a:0,exp:'위험등급 상향, 이상거래 발생, 정보 만료 등이 고객확인 갱신의 대표적 트리거입니다.'},
+{subject:'실무',diff:'중',type:'single',q:'다음 중 \'제3자 위탁(Reliance)\'과 \'아웃소싱(Outsourcing)\'의 차이에 대한 설명으로 가장 적절한 것은?',opts:['위탁은 제3자가 이미 수행한 CDD 결과를 신뢰해 활용하는 것이고, 아웃소싱은 CDD 수행 자체를 외부업체에 대행시키는 것이다','두 개념은 완전히 동일하다','위탁은 국제기준상 금지된다','아웃소싱은 항상 금지된다','두 개념 모두 CDD와 무관하다'],a:0,exp:'제3자 위탁은 기존 CDD 결과 신뢰, 아웃소싱은 CDD 수행 자체의 외부 대행이라는 점에서 구분됩니다.'},
+{subject:'실무',diff:'중',type:'single',q:'다음 중 게이트키퍼(변호사·회계사 등)가 고객을 위해 부동산 매입 자금을 관리하는 경우 유의해야 할 위험으로 가장 적절한 것은?',opts:['고객의 실제소유자 및 자금출처를 확인하지 않으면 자금세탁에 이용될 위험이 있다','게이트키퍼는 확인 의무가 전혀 없다','부동산 거래는 항상 저위험이다','게이트키퍼는 자금세탁방지 대상이 아니다','부동산 거래는 국제기준과 무관하다'],a:0,exp:'게이트키퍼가 실제소유자·자금출처 확인을 소홀히 하면 부동산 거래가 자금세탁에 이용될 위험이 있습니다.'},
+{subject:'실무',diff:'하',type:'single',q:'부동산 거래가 자금세탁방지 관점에서 고위험으로 평가되는 이유로 가장 적절한 것은?',opts:['고액 거래가 이루어지고 소유권 이전을 통해 자금의 형태를 쉽게 바꿀 수 있기 때문','부동산은 항상 저위험이기 때문','부동산 거래는 국제기준의 규율 대상이 아니기 때문','부동산은 현금거래가 전혀 없기 때문','부동산 거래는 세금과만 관련되기 때문'],a:0,exp:'고액거래와 소유권 이전을 통한 자금형태 전환 가능성 때문에 부동산 거래는 고위험으로 평가됩니다.'},
+{subject:'실무',diff:'중',type:'single',q:'다음 중 생명보험 상품이 자금세탁방지 관점에서 위험요인으로 다뤄지는 이유로 가장 적절한 것은?',opts:['일부 상품은 저축성 요소가 강해 자금이동·세탁 수단으로 악용될 가능성이 있기 때문','모든 생명보험은 위험이 없기 때문','보험은 국제기준의 적용 대상이 아니기 때문','보험은 현금거래가 전혀 없기 때문','보험 계약자는 확인이 필요 없기 때문'],a:0,exp:'저축성 요소가 강한 보험상품은 자금이동·세탁 수단으로 악용될 가능성이 있어 위험요인으로 다뤄집니다.'},
+{subject:'실무',diff:'중',type:'single',q:'환전영업자(소액 환전상 등)에 대한 자금세탁방지 감독이 강조되는 이유로 가장 적절한 것은?',opts:['현금성 거래가 많고 익명성이 높아 자금세탁에 취약할 수 있기 때문','환전영업자는 금융회사가 아니어서 규율 대상이 아니기 때문','환전은 항상 소액이라 위험이 없기 때문','환전영업자는 국제기준과 무관하기 때문','환전영업자는 감독대상에서 제외되기 때문'],a:0,exp:'현금성·익명성이 높은 환전영업의 특성상 자금세탁방지 감독이 중요하게 다뤄집니다.'},
+{subject:'실무',diff:'상',type:'single',q:'자금서비스업(Money Service Business, MSB)적 성격을 가진 사업자(환전, 소액송금 등)에 대해 강조되는 통제로 가장 적절한 것은?',opts:['등록·신고 의무 이행 및 CDD·STR 등 예방조치의 철저한 이행','모든 통제를 면제','등록 없이 자유롭게 영업 가능','CDD는 선택사항','STR 의무는 은행에만 적용'],a:0,exp:'MSB적 사업자에게는 등록·신고 의무와 CDD·STR 등 예방조치의 철저한 이행이 강조됩니다.'},
+{subject:'실무',diff:'중',type:'single',q:'다음 중 \'기존 고객(Existing Customer)에 대한 소급 CDD\'가 필요한 경우로 가장 적절한 것은?',opts:['법령·감독규정 개정으로 기존 CDD 수준이 새로운 기준에 미달하는 경우','기존 고객은 소급 확인이 절대 불필요','신규 고객만 CDD 대상이 될 수 있음','기존 고객은 위험도와 무관하게 항상 저위험','소급 CDD는 국제기준과 무관함'],a:0,exp:'법령·규정 개정으로 기존 CDD가 새 기준에 미달하는 경우 소급 CDD가 필요할 수 있습니다.'},
+{subject:'실무',diff:'하',type:'single',q:'다음 중 \'고객 이탈(Attrition)\'과 자금세탁방지 관점의 관계로 가장 적절한 것은?',opts:['CDD 강화 등으로 고객이 이탈하더라도, 자금세탁방지 의무 이행이 우선되어야 한다','고객 이탈을 막기 위해 CDD를 생략해도 된다','고객 이탈은 자금세탁방지와 전혀 무관하다','이탈 방지가 CDD 이행보다 항상 우선한다','이탈률이 높으면 CDD를 완화해야 한다'],a:0,exp:'고객 이탈 우려가 있더라도 자금세탁방지 의무 이행이 우선되어야 합니다.'},
+{subject:'실무',diff:'중',type:'single',q:'다음 중 \'해외지점·현지법인\'을 보유한 금융회사그룹의 자금세탁방지 관련 실무적 원칙으로 가장 적절한 것은?',opts:['그룹 차원의 공통 AML 정책을 수립하고 현지 법규와 상충되지 않는 범위에서 이행을 요구한다','해외지점은 본사 정책과 무관하게 자율적으로만 운영','해외지점은 자금세탁방지 의무가 없음','그룹 정책은 국내지점에만 적용','현지법규가 항상 그룹정책보다 우선하여 무시해도 됨'],a:0,exp:'그룹 차원의 공통 정책을 현지 법규와 상충되지 않는 범위에서 이행하도록 하는 것이 일반적 원칙입니다.'},
+{subject:'실무',diff:'중',type:'single',q:'다음 중 \'컴플라이언스 문화(Compliance Culture)\'가 조직에 정착되었는지를 보여주는 지표로 가장 적절한 것은?',opts:['경영진의 관심과 지원, 임직원의 자발적 보고 참여, 충분한 인력·예산 배정 등','광고비 집행 규모','매출 성장률','주가 상승률','직원 근속연수'],a:0,exp:'경영진의 관심, 자발적 보고참여, 충분한 자원 배정이 컴플라이언스 문화 정착의 지표로 다뤄집니다.'},
+{subject:'실무',diff:'상',type:'single',q:'고위경영진(Senior Management)이 자금세탁방지 관련 책무를 수행하는 방식으로 가장 적절한 것은?',opts:['정책 승인, 자원 배정, 위험평가 결과 검토 등을 통해 전반적인 체계를 관장','실무는 전적으로 하위직원에게만 위임하고 관여하지 않음','경영진은 자금세탁방지와 무관','경영진 책무는 감독기관이 대신 수행','경영진은 형식적 서명만 하면 충분'],a:0,exp:'정책 승인, 자원 배정, 위험평가 검토 등을 통해 경영진이 전반적 체계를 관장하는 것이 책무 수행 방식입니다.'},
+{subject:'실무',diff:'중',type:'single',q:'다음 중 모니터링 시나리오(룰)의 \'기준값(Threshold) 조정(Tuning)\'이 필요한 이유로 가장 적절한 것은?',opts:['지나치게 낮은 기준값은 과도한 오탐을, 지나치게 높은 기준값은 실제 의심거래 누락을 초래할 수 있기 때문','기준값은 한 번 설정하면 영구히 변경할 필요가 없기 때문','기준값 조정은 감독기관만 할 수 있기 때문','기준값은 임의로 아무렇게 설정해도 무방하기 때문','기준값 조정은 시스템 비용만 늘릴 뿐 효과가 없기 때문'],a:0,exp:'기준값이 너무 낮으면 오탐 과다, 너무 높으면 실제 의심거래 누락으로 이어질 수 있어 적절한 튜닝이 필요합니다.'},
+{subject:'실무',diff:'하',type:'single',q:'다음 중 \'타이포로지(Typology, 유형분석)\' 자료가 실무에 활용되는 방식으로 가장 적절한 것은?',opts:['최근 자금세탁·테러자금조달 기법의 사례를 학습해 자체 모니터링·교육에 반영한다','타이포로지는 이론일 뿐 실무와 무관하다','타이포로지는 감독기관만 참고하면 충분하다','타이포로지는 법적 효력이 없어 무시해도 된다','타이포로지는 카지노와 무관하다'],a:0,exp:'최신 유형분석 사례를 학습해 자체 모니터링·교육에 반영하는 것이 실무 활용의 대표적 방식입니다.'},
+{subject:'실무',diff:'중',type:'single',q:'다음 중 카지노 관련 유형분석(Typology) 사례에서 공통적으로 언급되는 위험요소로 가장 적절한 것은?',opts:['현금-칩 전환의 반복, 정킷을 통한 고액자금 유입, 국경을 넘는 자금이동 등','카지노 이용시간이 긴 것','카지노 종사자의 근속연수','카지노의 인테리어 디자인','카지노 주차장 규모'],a:0,exp:'현금-칩 전환 반복, 정킷을 통한 고액자금 유입, 국경간 자금이동 등이 카지노 관련 유형분석에서 공통적으로 다뤄지는 위험요소입니다.'},
+{subject:'실무',diff:'최상',type:'single',q:'카지노 플로어 감독자가 특정 딜러 테이블에서 한 고객이 반복적으로 큰 손실을 감수하면서도 게임을 계속하는 것을 목격했고, 이 고객이 최근 정킷을 통해 입장한 것으로 확인되었다. 가장 적절한 대응은?',opts:['해당 고객 및 정킷 관련 거래에 대한 정보를 컴플라이언스·서베일런스에 공유하여 추가 모니터링 및 EDD 필요성을 검토하도록 한다','특별한 조치 없이 정상 영업으로 간주한다','고객이 손실을 보고 있으므로 자금세탁 위험이 없다고 단정한다','딜러 개인이 임의로 게임을 중단시킨다','정킷 관련 고객이므로 확인을 생략한다'],a:0,exp:'반복적 손실 감수 패턴은 자금세탁의 한 형태(의도적 손실을 통한 자금이전)로 다뤄질 수 있는 레드플래그이며, 정킷 관련성까지 겹치면 정보공유 및 EDD 검토가 필요합니다.'},
+{subject:'실무',diff:'중',type:'single',q:'다음 중 \'의도적 손실(Intentional Losing)\'을 통한 자금세탁 의심 패턴에 대한 설명으로 가장 적절한 것은?',opts:['자금을 정당하게 취득한 것처럼 보이기 위해 게임에서 의도적으로 자금을 잃어주는 방식으로 자금을 이전하는 기법일 수 있다','게임에서 손실을 보는 것은 항상 정상적인 도박행위일 뿐이다','의도적 손실은 자금세탁과 전혀 무관하다','의도적 손실은 카지노가 감시할 필요가 없다','의도적 손실은 오직 승자에게만 해당하는 개념이다'],a:0,exp:'의도적 손실은 공모자에게 자금을 이전하는 자금세탁 기법의 한 유형으로 다뤄질 수 있습니다.'},
+{subject:'실무',diff:'중',type:'single',q:'다음 중 카지노 종사자(딜러 등)가 고객의 이상행위를 목격했을 때 취해야 할 태도로 가장 적절한 것은?',opts:['고객에게 의심을 직접 표현하지 않고 정해진 절차에 따라 내부적으로 보고한다','고객에게 즉시 의심된다고 말한다','아무 조치 없이 무시한다','동료들에게 SNS로 공유한다','고객을 직접 추궁한다'],a:0,exp:'고객에게 직접 의심을 표현하지 않고 정해진 내부 절차에 따라 보고하는 것이 원칙입니다.'},
+{subject:'실무',diff:'하',type:'single',q:'다음 중 카지노 종사자가 STR 관련 내부보고 사실을 고객에게 발설했을 경우 발생할 수 있는 문제로 가장 적절한 것은?',opts:['tipping-off 금지 위반으로 법적 제재를 받을 수 있다','아무 문제가 없다','고객 서비스 만족도만 높아진다','오히려 권장되는 행위이다','발설은 의무사항이다'],a:0,exp:'STR 관련 내부보고 사실을 고객에게 발설하는 것은 tipping-off 금지 위반으로 법적 제재 대상이 될 수 있습니다.'},
+{subject:'실무',diff:'중',type:'single',q:'다음 중 \'고객 온보딩(Onboarding)\' 과정에서 자금세탁방지 관점의 핵심 단계로 가장 적절한 것은?',opts:['신원확인, 실제소유자 확인, 위험평가, 제재대상자 스크리닝 등을 순차적으로 완료','마케팅 동의만 받으면 온보딩 완료','온보딩은 확인 절차 없이 즉시 완료 가능','온보딩은 감독기관이 대신 수행','온보딩 단계에는 위험평가가 불필요'],a:0,exp:'신원확인, 실제소유자 확인, 위험평가, 제재대상자 스크리닝의 순차적 완료가 온보딩의 핵심 단계입니다.'},
+{subject:'실무',diff:'하',type:'single',q:'다음 중 \'고객 오프보딩(Offboarding, 거래관계 종료)\' 시 유의해야 할 사항으로 가장 적절한 것은?',opts:['종료 사유와 절차를 문서화하고, tipping-off 우려가 없는 범위에서 처리한다','종료 사유는 기록할 필요가 없다','오프보딩은 고객에게 반드시 상세 이유를 설명해야 한다','오프보딩은 아무 절차 없이 즉시 가능하다','오프보딩은 감독기관의 사전승인이 항상 필요하다'],a:0,exp:'종료 사유·절차의 문서화와 tipping-off 우려를 고려한 신중한 처리가 오프보딩의 핵심입니다.'},
+{subject:'실무',diff:'중',type:'single',q:'다음 중 자금세탁방지 관련 \'위험 히트맵(Heat Map)\'이 실무에서 활용되는 방식으로 가장 적절한 것은?',opts:['고객·상품·채널별 위험도를 시각화해 자원배분과 정책수립의 근거로 활용한다','히트맵은 실무와 무관한 장식용 자료이다','히트맵은 감독기관만 작성한다','히트맵은 법적 효력이 없어 참고할 필요가 없다','히트맵은 매출 분석에만 사용된다'],a:0,exp:'위험 히트맵은 고객·상품·채널별 위험도를 시각화해 자원배분·정책수립의 근거자료로 활용됩니다.'},
+{subject:'실무',diff:'중',type:'single',q:'다음 중 카지노에서 \'고객 등급별 응대 매뉴얼\'에 자금세탁방지 절차를 포함시켜야 하는 이유로 가장 적절한 것은?',opts:['고객 등급(특히 VIP)별로 요구되는 CDD·EDD 수준이 다르므로 실무 매뉴얼에 명확히 반영해야 하기 때문','매뉴얼은 마케팅 목적으로만 존재하기 때문','고객 등급과 CDD 수준은 무관하기 때문','매뉴얼에 자금세탁방지 내용을 포함하는 것은 금지되기 때문','모든 등급에 동일한 절차만 적용하면 충분하기 때문'],a:0,exp:'고객 등급별로 요구되는 CDD·EDD 수준이 다르므로 응대 매뉴얼에 명확히 반영해야 합니다.'},
+{subject:'실무',diff:'상',type:'single',q:'다음 중 카지노 고객이 여러 명의 명의로 나누어 계좌(또는 고객 프로필)를 개설해 이용하려는 시도를 포착했을 때 가장 적절한 대응은?',opts:['명의 분산 이용 정황을 종합적으로 파악해 동일 실제이용자 여부를 확인하고 필요시 EDD·STR을 검토한다','각 명의를 완전히 별개의 고객으로만 취급하고 연계분석을 하지 않는다','명의가 다르므로 무조건 문제없다고 판단한다','명의 분산은 확인할 필요가 없는 정상적 행위이다','고객에게 명의를 통합하라고 강요한다'],a:0,exp:'명의 분산 이용 정황은 종합적으로 파악해 동일 실제이용자 여부를 확인하고 필요시 EDD·STR을 검토해야 합니다.'},
+{subject:'실무',diff:'중',type:'single',q:'다음 중 \'고객확인 예외 사유\'를 남용하는 경우 발생할 수 있는 위험으로 가장 적절한 것은?',opts:['실제로는 CDD가 필요한 고객·거래에도 예외를 적용해 자금세탁 탐지가 무력화될 위험','예외 사유 남용은 실무에 아무 영향이 없음','예외 사유는 남용해도 법적 문제가 없음','예외 사유는 모든 고객에게 항상 적용 가능','예외 사유는 감독기관이 자동으로 걸러줌'],a:0,exp:'예외 사유의 남용은 실제로 CDD가 필요한 거래에도 예외를 적용하게 되어 탐지체계를 무력화시킬 위험이 있습니다.'},
+{subject:'실무',diff:'하',type:'single',q:'다음 중 자금세탁방지 관련 \'표준운영절차(SOP)\' 문서화가 필요한 이유로 가장 적절한 것은?',opts:['담당자 변경에도 일관된 절차 이행을 보장하고 감독기관에 이행현황을 입증하는 근거가 되기 때문','SOP는 형식적 서류일 뿐 실효성이 없기 때문','SOP는 감독기관만 작성하는 문서이기 때문','SOP는 한 번 작성 후 다시 볼 필요가 없기 때문','SOP는 법적으로 요구되지 않기 때문'],a:0,exp:'SOP 문서화는 담당자 변경에도 일관된 이행을 보장하고 감독기관에 대한 입증 근거가 됩니다.'},
+{subject:'실무',diff:'중',type:'single',q:'다음 중 \'내부통제 미비점(Gap)\'이 발견된 경우 실무적으로 취해야 할 절차로 가장 적절한 것은?',opts:['미비점의 원인을 분석하고 개선계획을 수립·이행하며 이행결과를 점검한다','미비점을 발견 즉시 은폐한다','미비점은 감독기관에 보고할 필요가 없다','미비점은 개선하지 않고 방치해도 무방하다','미비점 발견 시 담당자만 문책하면 충분하다'],a:0,exp:'미비점 발견시 원인분석-개선계획 수립·이행-이행결과 점검의 절차를 거치는 것이 바람직합니다.'},
+{subject:'실무',diff:'중',type:'single',q:'다음 중 자금세탁방지 관련 \'이해관계자(Stakeholder) 커뮤니케이션\'의 중요성으로 가장 적절한 것은?',opts:['경영진·감독기관·임직원 등 각 이해관계자에게 적절한 수준의 정보를 공유해 체계의 실효성을 높인다','이해관계자와의 소통은 불필요하다','모든 정보는 무조건 전 직원에게 공개해야 한다','감독기관과의 소통은 최소화해야 한다','경영진에게는 보고할 필요가 없다'],a:0,exp:'각 이해관계자에게 적절한 수준의 정보를 공유하는 것이 체계의 실효성을 높이는 데 기여합니다.'},
+{subject:'실무',diff:'상',type:'single',q:'다음 중 자금세탁방지 관련 \'3차 방어선(Three Lines of Defense)\' 모델에서 각 방어선의 역할로 가장 적절한 것은?',opts:['1차: 현업부서의 통제, 2차: 컴플라이언스·리스크관리, 3차: 내부감사의 독립적 검증','세 방어선은 모두 동일한 역할을 수행','1차는 감독기관, 2차는 외부회계법인, 3차는 국회','방어선 모델은 자금세탁방지와 무관','방어선은 한 개만 있으면 충분'],a:0,exp:'1차 현업부서 통제, 2차 컴플라이언스·리스크관리, 3차 내부감사의 독립적 검증으로 구성되는 것이 3차 방어선 모델입니다.'},
+{subject:'실무',diff:'중',type:'single',q:'카지노에서 1차 방어선(현업부서)에 해당하는 조직으로 가장 적절한 것은?',opts:['캐셔, 딜러, 서베일런스 등 현장에서 직접 고객과 접촉하는 부서','이사회','외부 감사인','감독기관','국회'],a:0,exp:'캐셔·딜러·서베일런스 등 현장 접점 부서가 1차 방어선에 해당합니다.'},
+{subject:'실무',diff:'중',type:'single',q:'카지노에서 2차 방어선(컴플라이언스)에 해당하는 조직의 역할로 가장 적절한 것은?',opts:['정책 수립, 현업부서 지원 및 모니터링, STR 최종 판단 등','현장에서 직접 칩을 판매','독립적인 사후 감사만 수행','감독기관의 역할을 대신 수행','이사회의 역할을 대신 수행'],a:0,exp:'정책 수립, 현업부서 지원·모니터링, STR 최종 판단이 2차 방어선(컴플라이언스)의 역할입니다.'},
+{subject:'실무',diff:'중',type:'single',q:'카지노에서 3차 방어선(내부감사)의 역할로 가장 적절한 것은?',opts:['1·2차 방어선이 제대로 작동하고 있는지를 독립적으로 검증·평가','현장에서 직접 고객을 응대','컴플라이언스 정책을 대신 수립','감독기관을 대신해 제재를 부과','마케팅 전략을 수립'],a:0,exp:'1·2차 방어선의 작동 여부를 독립적으로 검증·평가하는 것이 3차 방어선(내부감사)의 역할입니다.'},
+{subject:'실무',diff:'중',type:'single',q:'다음 중 자금세탁방지 관련 \'독립성(Independence)\'이 컴플라이언스·내부감사 조직에 요구되는 이유로 가장 적절한 것은?',opts:['영업부서의 이해관계로부터 자유롭게 객관적으로 판단·평가할 수 있어야 하기 때문','독립성은 형식적 구호일 뿐 실무와 무관하기 때문','독립성이 없어야 오히려 효율적이기 때문','독립성은 감독기관에만 요구되는 개념이기 때문','독립성은 국제기준과 무관하기 때문'],a:0,exp:'영업 이해관계로부터 자유로운 객관적 판단·평가를 위해 독립성이 요구됩니다.'},
+{subject:'실무',diff:'하',type:'single',q:'다음 중 \'보고책임자\'가 영업부서와 독립적으로 운영되어야 하는 이유로 가장 적절한 것은?',opts:['영업실적 등 이해관계에 영향을 받지 않고 객관적으로 STR 여부를 판단해야 하기 때문','독립성은 필요 없으며 영업부서장이 겸임해도 무방','보고책임자는 영업실적을 우선해야 하기 때문','독립성은 형식적 요건일 뿐','보고책임자는 감독기관 소속이어야 하기 때문'],a:0,exp:'영업실적 등 이해관계로부터 독립되어야 객관적인 STR 판단이 가능합니다.'},
+{subject:'실무',diff:'중',type:'single',q:'다음 중 자금세탁방지 관련 \'이행 격차(Implementation Gap)\'란 무엇을 의미하는가?',opts:['정책·규정은 잘 마련되어 있으나 실제 현장에서 제대로 이행되지 않는 상태','정책 자체가 전혀 없는 상태','현장 이행은 완벽하나 정책이 없는 상태','이행 격차는 항상 감독기관의 책임','이행 격차는 존재할 수 없는 개념'],a:0,exp:'이행 격차는 정책·규정은 갖춰져 있으나 현장 이행이 미흡한 상태를 의미합니다.'},
+{subject:'실무',diff:'최상',type:'single',q:'컴플라이언스 부서 감사 결과, 다수의 STR 보고서가 구체적 사실관계 없이 형식적으로만 작성되어 제출된 것으로 확인되었다. 가장 적절한 개선방향은?',opts:['담당 직원 대상 재교육을 실시하고 STR 작성 가이드라인·검토절차를 강화하여 보고품질을 제고한다','문제가 된 담당자를 즉시 해고하는 것 외에는 조치가 필요 없다','형식적 작성이라도 제출 건수가 많으므로 문제없다고 본다','STR 작성 기준을 더 완화하여 부담을 줄인다','향후 STR 제출 자체를 축소한다'],a:0,exp:'형식적 STR은 실효성이 낮으므로, 재교육과 가이드라인·검토절차 강화를 통한 보고품질 제고가 적절한 개선방향입니다.'},
+{subject:'실무',diff:'중',type:'single',q:'다음 중 \'지속적 개선(Continuous Improvement)\'이 자금세탁방지 체계에서 강조되는 이유로 가장 적절한 것은?',opts:['범죄기법과 규제환경이 계속 변화하므로 체계도 지속적으로 점검·개선되어야 하기 때문','한 번 구축한 체계는 영구히 변경할 필요가 없기 때문','지속적 개선은 비용만 발생시킬 뿐 효과가 없기 때문','지속적 개선은 감독기관의 역할일 뿐 회사와 무관하기 때문','지속적 개선은 법적 요구사항이 아니기 때문'],a:0,exp:'범죄기법과 규제환경의 지속적 변화에 대응하기 위해 체계도 지속적으로 개선되어야 합니다.'},
+{subject:'실무',diff:'중',type:'single',q:'다음 중 자금세탁방지 관련 성과지표(KPI)로 활용될 수 있는 예로 가장 적절한 것은?',opts:['STR 처리기한 준수율, 교육 이수율, 오탐 비율 개선도 등','광고 클릭률','매출 성장률','주가 등락률','직원 만족도 설문 결과만'],a:0,exp:'STR 처리기한 준수율, 교육이수율, 오탐 비율 개선도 등이 대표적인 AML 관련 KPI로 활용됩니다.'},
+{subject:'실무',diff:'중',type:'single',q:'다음 중 카지노 컴플라이언스 부서가 경영진에게 정기적으로 보고해야 하는 내용으로 가장 적절한 것은?',opts:['자금세탁방지 관련 위험현황, STR·CTR 처리현황, 주요 이슈 및 개선계획 등','직원 개인 신상정보','고객의 게임 승률','카지노 시설 유지보수 일정','광고 캠페인 성과'],a:0,exp:'위험현황, STR·CTR 처리현황, 주요 이슈·개선계획이 경영진 정기보고의 핵심 내용입니다.'},
+{subject:'실무',diff:'하',type:'single',q:'다음 중 자금세탁방지 관련 \'경영진 보고\'가 형식적으로만 이루어질 경우 발생할 수 있는 문제로 가장 적절한 것은?',opts:['경영진이 실제 위험현황을 파악하지 못해 적절한 의사결정과 자원배분이 이루어지지 않을 수 있다','형식적 보고는 오히려 효율적이다','경영진 보고는 원래 형식적인 것이 정상이다','형식적 보고는 감독기관이 선호하는 방식이다','형식적 보고는 아무 문제가 없다'],a:0,exp:'형식적 보고는 경영진의 위험인식과 의사결정을 저해할 수 있습니다.'},
+{subject:'실무',diff:'중',type:'single',q:'다음 중 자금세탁방지 관련 \'외부전문가(컨설턴트, 법률자문 등)\' 활용이 도움이 될 수 있는 경우로 가장 적절한 것은?',opts:['복잡한 법규 해석이나 체계 진단이 필요한 경우 외부전문가의 조언을 활용할 수 있다','외부전문가 활용은 법적으로 금지된다','외부전문가는 항상 내부 담당자를 대체해야 한다','외부전문가 활용시 회사의 책임은 완전히 소멸한다','외부전문가는 자금세탁방지와 무관한 분야이다'],a:0,exp:'복잡한 법규 해석이나 체계 진단이 필요한 경우 외부전문가 활용이 도움이 될 수 있으나, 최종 책임은 회사에 남습니다.'},
+{subject:'실무',diff:'최상',type:'single',q:'카지노의 자금세탁방지 체계가 실효적으로 작동하기 위해 가장 핵심적으로 요구되는 것은 무엇인가?',opts:['경영진의 책임있는 관심, 명확한 절차와 3차 방어선의 유기적 작동, 현장(서베일런스·캐셔 등)의 실질적 이행이 결합되어야 한다','오직 감독기관의 검사만으로 충분하다','오직 시스템 도입만으로 충분하다','오직 법규 존재만으로 충분하다','오직 직원 개인의 도덕성만으로 충분하다'],a:0,exp:'경영진의 관심, 명확한 절차·방어선, 현장의 실질적 이행이 유기적으로 결합되어야 실효적으로 작동합니다.'},
+{subject:'실무',diff:'중',type:'single',q:'다음 중 \'역할 분리(Segregation of Duties)\' 원칙이 카지노 캐셔 운영에 적용되는 방식으로 가장 적절한 것은?',opts:['칩 발행·현금 관리·기록 검증 등을 서로 다른 직원이 담당하도록 하여 부정·공모 위험을 낮춘다','한 명의 직원이 모든 업무를 전담하는 것이 효율적이므로 권장된다','역할 분리는 자금세탁방지와 무관하다','역할 분리는 비용만 늘릴 뿐 효과가 없다','역할 분리는 법적으로 금지된다'],a:0,exp:'칩 발행·현금관리·기록검증을 서로 다른 직원이 담당하도록 하여 부정·공모 위험을 낮추는 것이 역할분리 원칙입니다.'},
+{subject:'실무',diff:'중',type:'single',q:'다음 중 카지노 캐셔의 칩 재고와 현금 잔액을 주기적으로 대조(Reconciliation)하는 것이 자금세탁방지에 기여하는 방식으로 가장 적절한 것은?',opts:['불일치가 발견되면 비정상적 자금흐름이나 내부통제 취약점을 조기에 발견할 수 있다','대조는 회계 목적일 뿐 자금세탁방지와는 무관하다','대조는 연 1회만 하면 충분하다','대조 결과는 폐기해도 무방하다','대조는 감독기관만 수행한다'],a:0,exp:'칩-현금 대조에서 불일치가 발견되면 비정상적 자금흐름이나 내부통제 취약점을 조기에 발견할 수 있습니다.'},
+{subject:'실무',diff:'상',type:'single',q:'카지노 내부직원이 특정 고객의 자금세탁을 돕고 있다는 정황(내부 공모 의심)이 제기된 경우, 가장 적절한 초기 대응은?',opts:['독립적인 조사 채널(내부감사·준법감시 등)을 통해 사실관계를 조사하고 필요시 관련 절차에 따라 조치한다','해당 직원의 동료에게만 구두로 확인하고 종결한다','증거 없이 즉시 해고 조치만 취한다','문제를 무시하고 넘어간다','고객에게 직접 사실 여부를 확인한다'],a:0,exp:'내부공모 의심은 독립적 조사채널을 통해 사실관계를 규명하는 것이 원칙이며, 성급한 결론이나 방치 모두 적절하지 않습니다.'},
+{subject:'실무',diff:'중',type:'single',q:'다음 중 자금세탁방지 관련 \'내부고발 채널\'이 실무적으로 효과를 발휘하기 위한 조건으로 가장 적절한 것은?',opts:['익명성 보장과 신고자 보호가 확실히 이루어져야 신고가 활성화될 수 있다','채널의 존재만으로 충분하며 운영방식은 중요하지 않다','신고자 정보는 반드시 공개되어야 효과적이다','내부고발 채널은 감독기관이 직접 운영해야만 유효하다','내부고발 채널은 연락처만 게시하면 충분하다'],a:0,exp:'익명성 보장과 신고자 보호가 확실해야 실제 신고가 활성화될 수 있습니다.'},
+{subject:'실무',diff:'중',type:'single',q:'다음 중 \'부정적 언론보도(Adverse Media) 검색\'이 고객확인 과정에서 활용되는 이유로 가장 적절한 것은?',opts:['공적 명단에는 없지만 언론을 통해 알려진 위험정보를 보완적으로 확인할 수 있기 때문','언론보도는 법적 효력이 있어 유일한 확인수단이기 때문','언론보도 검색은 불필요한 절차이기 때문','언론보도는 항상 사실이므로 다른 확인이 필요 없기 때문','언론보도 검색은 감독기관만 수행하는 절차이기 때문'],a:0,exp:'공적 명단에 없는 위험정보를 보완적으로 확인하기 위해 부정적 언론보도 검색이 활용됩니다.'},
+{subject:'실무',diff:'하',type:'single',q:'부정적 언론보도가 확인된 고객에 대해 취할 수 있는 실무적 조치로 가장 적절한 것은?',opts:['보도 내용의 신뢰성과 관련성을 검토해 위험등급 조정이나 추가 확인(EDD) 여부를 판단한다','보도 내용과 무관하게 무조건 거래를 거절한다','보도 내용은 무시하고 아무 조치도 취하지 않는다','보도 내용을 그대로 고객에게 전달해 반박을 요구한다','보도 내용은 확인 없이 그대로 신뢰한다'],a:0,exp:'보도의 신뢰성·관련성을 검토해 위험등급 조정이나 EDD 여부를 판단하는 것이 적절한 대응입니다.'},
+{subject:'실무',diff:'중',type:'single',q:'다음 중 EDD를 이미 실시 중인 고위험 고객에 대해 EDD를 \'종료(하향 조정)\'할 수 있는 경우로 가장 적절한 것은?',opts:['위험평가 결과 실제 위험도가 낮아졌다고 판단할 합리적 근거가 확인된 경우','EDD는 한 번 시작하면 영구히 유지해야 함','EDD 종료는 고객의 요청만으로 가능함','EDD 종료는 감독기관의 승인 없이는 절대 불가능함','EDD는 고객 위험도와 무관하게 유지됨'],a:0,exp:'위험평가 결과 실제 위험도가 낮아졌다는 합리적 근거가 확인되면 EDD 하향 조정이 가능합니다.'},
+{subject:'실무',diff:'중',type:'single',q:'다음 중 \'품질보증(Quality Assurance)\' 차원에서 CDD 파일을 표본추출하여 재검토하는 목적으로 가장 적절한 것은?',opts:['실제 CDD 이행 수준이 내부기준에 부합하는지 점검하고 미흡한 부분을 개선하기 위해','표본추출은 형식적 절차일 뿐 실효성이 없기 때문','표본추출은 감독기관만 수행하는 절차이기 때문','표본추출 결과는 활용할 필요가 없기 때문','표본추출은 전체 파일을 검토하는 것보다 항상 비효율적이기 때문'],a:0,exp:'표본추출 재검토는 실제 CDD 이행수준이 내부기준에 부합하는지 점검하고 개선점을 찾기 위한 QA 활동입니다.'},
+{subject:'실무',diff:'상',type:'single',q:'다음 중 보고책임자가 특정 사안에 대해 \'STR 미제출\'로 최종 판단한 경우에도 그 판단과정을 기록해야 하는 이유로 가장 적절한 것은?',opts:['사후 감독기관 검사나 내부감사시 판단의 합리성을 입증할 근거가 되기 때문','미제출 판단은 기록할 필요가 없기 때문','기록은 오히려 법적 책임을 가중시키므로 하지 않는 것이 유리하기 때문','미제출 판단은 구두로만 전달하면 충분하기 때문','기록은 감독기관이 대신 작성해주기 때문'],a:0,exp:'미제출 판단 기록은 사후 검사·감사시 판단의 합리성을 입증하는 근거자료가 됩니다.'},
+{subject:'실무',diff:'중',type:'single',q:'다음 중 카지노에서 \'고객 불만·분쟁 처리\'와 \'자금세탁방지 관련 조치\'를 담당하는 조직을 분리해서 운영하는 이유로 가장 적절한 것은?',opts:['이해관계 충돌을 방지하고 각 업무의 전문성과 객관성을 확보하기 위해','두 업무는 항상 동일 조직이 담당해야 효율적이기 때문','분리 운영은 법적으로 금지되어 있기 때문','분리 운영은 비용만 늘릴 뿐 의미가 없기 때문','고객 불만 처리는 자금세탁방지와 아무 관련이 없어 고려할 필요가 없기 때문'],a:0,exp:'이해관계 충돌 방지와 전문성·객관성 확보를 위해 두 업무를 분리 운영하는 것이 바람직합니다.'},
+{subject:'실무',diff:'중',type:'single',q:'다음 중 마케팅부서가 보유한 고객 데이터를 컴플라이언스 부서와 공유할 때 고려해야 할 사항으로 가장 적절한 것은?',opts:['개인정보보호 법령을 준수하면서도 자금세탁방지 목적의 필요한 정보 공유는 이루어지도록 균형을 맞춘다','개인정보보호를 이유로 어떠한 정보도 공유하지 않는다','마케팅 데이터는 컴플라이언스와 무관하므로 공유가 불필요하다','모든 마케팅 데이터를 제한 없이 공유한다','데이터 공유는 감독기관의 사전승인 없이는 절대 불가능하다'],a:0,exp:'개인정보보호 법령 준수와 자금세탁방지 목적의 필요한 정보공유 사이의 균형이 중요합니다.'},
+{subject:'실무',diff:'하',type:'single',q:'다음 중 STR·CDD 관련 기록을 외부로 반출(예: USB 등)할 때 유의해야 할 사항으로 가장 적절한 것은?',opts:['보안통제 절차를 준수하고 무단 반출을 방지해 정보 유출 및 tipping-off 위험을 예방한다','반출은 아무 통제 없이 자유롭게 가능하다','반출 기록은 남길 필요가 없다','반출은 권장되는 업무방식이다','반출 통제는 자금세탁방지와 무관하다'],a:0,exp:'STR 등 민감정보의 무단 반출은 정보유출 및 tipping-off로 이어질 수 있어 보안통제가 중요합니다.'},
+{subject:'실무',diff:'중',type:'single',q:'CCTV 영상 등 감시자료의 보존기간을 정할 때 고려해야 할 사항으로 가장 적절한 것은?',opts:['사후 조사·수사에 활용될 수 있도록 관련 법규 및 내부정책에서 정한 최소 보존기간을 준수한다','영상은 즉시 삭제해도 무방하다','보존기간은 임의로 정해도 문제없다','영상자료는 자금세탁방지와 무관하다','보존기간은 감독기관이 개별적으로 지정해줄 때만 정해진다'],a:0,exp:'사후 조사·수사 활용 가능성을 고려해 관련 법규·내부정책상 최소 보존기간을 준수해야 합니다.'},
+{subject:'실무',diff:'중',type:'single',q:'다음 중 카지노에서 \'미스터리 쇼퍼(Mystery Shopper)\' 방식으로 내부통제를 점검하는 것이 유용한 이유로 가장 적절한 것은?',opts:['실제 현장에서 CDD 등 절차가 제대로 이행되는지를 직접 체험 방식으로 점검할 수 있기 때문','미스터리 쇼퍼는 마케팅 목적에만 활용되기 때문','이 방식은 법적으로 금지되어 있기 때문','미스터리 쇼퍼는 감독기관만 활용할 수 있는 방법이기 때문','이 방식은 자금세탁방지와 무관하기 때문'],a:0,exp:'미스터리 쇼퍼 방식은 실제 현장에서 CDD 등 절차 이행 여부를 체험 방식으로 점검하는 데 유용합니다.'},
+{subject:'실무',diff:'중',type:'single',q:'다음 중 신규 딜러·캐셔 직원 채용시 준법감시 관점에서 고려할 사항으로 가장 적절한 것은?',opts:['해당 직무 수행에 필요한 기본적인 자격·경력 확인 및 자금세탁방지 관련 초기교육 이수 계획을 마련한다','채용시 자금세탁방지 관련 사항은 전혀 고려하지 않는다','채용 후 교육은 불필요하다','신규 직원은 즉시 고위험 업무에 배치해도 무방하다','채용 절차와 준법감시는 무관하다'],a:0,exp:'자격·경력 확인 및 초기교육 이수 계획 마련이 신규 채용시 준법감시 관점의 고려사항입니다.'},
+{subject:'실무',diff:'상',type:'single',q:'다음 중 \'핵심 준법감시 인력의 순환보직(Job Rotation)\'이 실무적으로 검토될 수 있는 이유로 가장 적절한 것은?',opts:['장기간 동일 업무 수행에 따른 유착·관행화 위험을 낮추고 새로운 시각의 점검을 가능하게 하기 위해','순환보직은 항상 업무 연속성을 해치므로 절대 시행해서는 안 된다','순환보직은 자금세탁방지와 무관하다','순환보직은 법적으로 금지되어 있다','순환보직은 감독기관만 결정할 수 있다'],a:0,exp:'장기간 동일 업무에 따른 유착·관행화 위험을 낮추기 위해 순환보직이 검토될 수 있습니다.'},
+{subject:'실무',diff:'중',type:'single',q:'다음 중 원격(비대면) 온라인 예약·멤버십 시스템 운영시 추가로 고려해야 할 자금세탁방지 위험으로 가장 적절한 것은?',opts:['비대면 등록 과정에서의 신원확인 신뢰도 저하 위험을 보완할 인증절차 마련','온라인 시스템은 자금세탁방지와 무관하다','온라인 등록은 확인 절차가 필요 없다','온라인 시스템은 항상 오프라인보다 안전하다','온라인 멤버십은 CDD 대상이 아니다'],a:0,exp:'비대면 등록시 신원확인 신뢰도 저하 위험을 보완할 인증절차 마련이 필요합니다.'},
+{subject:'실무',diff:'중',type:'single',q:'다음 중 고객이 동일한 신분증 사본을 여러 명이 공유해 사용하려는 시도를 발견했을 경우 가장 적절한 대응은?',opts:['신원확인 절차를 강화하고 명의도용 등 의심 정황에 대한 내부보고를 검토한다','신분증 사본이므로 원본 확인 없이 그대로 인정한다','공유 사용은 흔한 일이므로 무시한다','해당 고객군 전체의 출입을 영구 금지한다','신분증 진위와 무관하게 서비스만 제공한다'],a:0,exp:'명의도용 의심 정황은 신원확인 강화 및 내부보고 검토 대상이 됩니다.'},
+{subject:'실무',diff:'중',type:'single',q:'다음 중 카지노가 고객의 요청에 따라 특정 고액 거래를 \'분할하여 처리\'해달라는 요청을 받았을 때 가장 적절한 대응은?',opts:['분할 요청의 목적을 확인하고, 기준금액 회피 등 구조화 의도가 의심되면 정상적으로 통합 처리하거나 내부보고를 검토한다','고객 요청이므로 그대로 분할 처리해준다','분할 요청은 항상 정상적인 서비스 요청이므로 문제되지 않는다','분할 요청은 무조건 거절해야 한다','분할 요청에 대해서는 확인할 필요가 없다'],a:0,exp:'고객이 분할 처리를 명시적으로 요청하는 경우 오히려 구조화 의도를 의심할 수 있는 신호가 될 수 있어 주의가 필요합니다.'},
+{subject:'실무',diff:'최상',type:'single',q:'카지노 컴플라이언스 담당자가 한 고객의 거래이력을 분석한 결과, 매월 유사한 시기에 여러 카지노 사업장을 순회하며 각각 기준금액 이하의 금액으로 칩을 구매·환전하는 패턴을 발견했다. 가장 적절한 결론 및 대응은?',opts:['여러 사업장에 걸친 반복적 근접거래 패턴을 종합해 구조화 의심 정황으로 판단하고 STR 제출을 검토한다','각 사업장별로는 기준금액 미달이므로 전혀 문제가 없다고 결론짓는다','패턴 분석 없이 우연으로 간주하고 종결한다','고객에게 패턴을 직접 설명해달라고 요청한 뒤 그 답변만으로 종결한다','해당 고객의 모든 카지노 이용을 영구 금지한다'],a:0,exp:'여러 사업장에 걸친 반복적 근접거래 패턴은 통합해서 판단해야 구조화 의심 여부를 제대로 평가할 수 있습니다.'},
+{subject:'실무',diff:'중',type:'single',q:'다음 중 자금세탁방지 관련 \'경보 임계치(Alert Threshold)\'를 지나치게 낮게 설정했을 때 발생할 수 있는 실무적 결과로 가장 적절한 것은?',opts:['과도한 알림 발생으로 담당 인력의 업무 부담이 커지고 정작 중요한 알림이 묻힐 위험이 있다','임계치를 낮출수록 항상 더 정확한 탐지가 가능하다','임계치는 낮을수록 비용이 줄어든다','임계치 설정은 실무에 영향이 없다','임계치를 낮추면 오탐이 사라진다'],a:0,exp:'지나치게 낮은 임계치는 과도한 알림을 유발해 중요한 알림이 묻힐 위험을 초래할 수 있습니다.'},
+{subject:'실무',diff:'중',type:'single',q:'다음 중 \'연간 자금세탁방지 교육계획\'에 포함되어야 하는 요소로 가장 적절한 것은?',opts:['최신 유형분석(Typology), 관련 법규 개정사항, 레드플래그 사례 등','직원 개인 취미 활동','카지노 인테리어 트렌드','경쟁사 마케팅 전략','주가 전망'],a:0,exp:'최신 유형분석, 법규 개정사항, 레드플래그 사례가 연간 교육계획의 핵심 요소입니다.'},
+{subject:'실무',diff:'중',type:'single',q:'다음 중 자금세탁방지 관련 \'내부정책 승인 권한\'과 관련해 가장 적절한 설명은?',opts:['주요 정책은 이사회 또는 경영진 차원에서 승인되어야 조직 전체에 대한 구속력과 실효성을 확보할 수 있다','정책은 담당 실무자가 개인적으로 정하면 충분하다','정책 승인은 감독기관이 직접 수행한다','정책은 승인 없이도 자동으로 유효하다','정책 승인 권한은 마케팅부서에 있다'],a:0,exp:'주요 정책은 이사회 또는 경영진 차원의 승인을 통해 조직 전체에 대한 구속력을 확보해야 합니다.'},
+{subject:'실무',diff:'하',type:'single',q:'다음 중 자금세탁방지 관련 \'내부정책의 정기적 재검토\'가 필요한 이유로 가장 적절한 것은?',opts:['법령·감독규정 개정 및 위험환경 변화에 맞추어 정책의 적합성을 유지하기 위해','정책은 한 번 제정되면 절대 수정할 수 없기 때문','재검토는 형식적 절차일 뿐 실익이 없기 때문','재검토는 감독기관만 수행하는 절차이기 때문','정책은 재검토할 법적 근거가 없기 때문'],a:0,exp:'법령·감독규정 개정 및 위험환경 변화에 맞춰 정책의 적합성을 유지하기 위해 정기적 재검토가 필요합니다.'},
+{subject:'실무',diff:'중',type:'single',q:'다음 중 카지노가 새로운 게임 상품(예: 신규 전자테이블게임)을 도입할 때 자금세탁방지 관점에서 사전에 검토해야 할 사항으로 가장 적절한 것은?',opts:['신규 상품의 거래방식이 자금세탁에 이용될 가능성이 있는지 위험평가를 실시한다','신규 상품 도입시 자금세탁방지 검토는 불필요하다','신규 상품은 항상 저위험으로 간주한다','위험평가는 상품 도입 후 문제가 생긴 뒤에만 실시한다','신규 상품 검토는 마케팅부서만 담당한다'],a:0,exp:'신규 상품 도입 전 자금세탁 이용 가능성에 대한 사전 위험평가가 필요합니다.'},
+{subject:'실무',diff:'중',type:'single',q:'다음 중 \'신상품·신서비스 위험평가(New Product Risk Assessment)\'를 상품 출시 전에 실시해야 하는 이유로 가장 적절한 것은?',opts:['출시 후 위험이 확인되면 이미 발생한 자금세탁 피해를 되돌리기 어려울 수 있기 때문','위험평가는 출시 후에 하는 것이 더 정확하기 때문','신상품은 위험평가 대상이 아니기 때문','위험평가는 상품과 무관한 절차이기 때문','위험평가는 감독기관이 사후에 대신 해주기 때문'],a:0,exp:'출시 후에는 이미 발생한 피해를 되돌리기 어려우므로 출시 전 사전 위험평가가 중요합니다.'},
+{subject:'실무',diff:'상',type:'single',q:'다음 중 카지노가 가상자산으로 결제나 환전을 시도하는 고객을 상대할 경우 실무적으로 고려해야 할 사항으로 가장 적절한 것은?',opts:['가상자산 관련 자금세탁방지 규율(신고된 VASP 여부, 자금출처 등)까지 종합적으로 고려한 고객확인이 필요할 수 있다','가상자산은 카지노와 전혀 관련이 없으므로 고려할 필요가 없다','가상자산 결제는 항상 자동으로 허용해야 한다','가상자산은 확인 절차 없이 처리 가능하다','가상자산 관련 사항은 마케팅부서가 결정한다'],a:0,exp:'가상자산 관련 결제·환전 시도는 VASP 신고 여부, 자금출처 등을 종합적으로 고려한 CDD가 필요할 수 있는 새로운 위험영역입니다.'},
+{subject:'실무',diff:'중',type:'single',q:'다음 중 \'고객확인 관련 시스템(CRM 등)\'과 \'거래모니터링시스템\' 간 연계가 필요한 이유로 가장 적절한 것은?',opts:['고객위험등급 정보와 실제 거래패턴을 연계 분석해야 이상거래 탐지의 정확성을 높일 수 있기 때문','두 시스템은 완전히 독립적으로 운영해야 하기 때문','연계는 비용만 늘릴 뿐 효과가 없기 때문','연계는 개인정보보호법상 절대 금지되기 때문','연계는 감독기관만 할 수 있는 작업이기 때문'],a:0,exp:'고객위험등급과 실제 거래패턴을 연계 분석해야 이상거래 탐지의 정확성을 높일 수 있습니다.'},
+{subject:'실무',diff:'중',type:'single',q:'다음 중 카지노에서 \'연간 자금세탁방지 자체평가(Self-Assessment)\'를 실시하는 목적으로 가장 적절한 것은?',opts:['내부통제 수준을 스스로 점검해 개선점을 도출하고 감독기관 검사에도 대비하기 위해','자체평가는 감독기관 검사를 대체하는 법적 절차이기 때문','자체평가는 형식적 서류 작업일 뿐 의미가 없기 때문','자체평가는 외부에 공개해야 하는 의무사항이기 때문','자체평가는 연 1회조차 필요 없는 절차이기 때문'],a:0,exp:'자체평가는 내부통제 수준을 스스로 점검해 개선점을 도출하고 감독기관 검사에 대비하는 목적을 가집니다.'},
+{subject:'실무',diff:'최상',type:'single',q:'다음 중 카지노가 자금세탁방지 체계를 지속적으로 고도화하기 위한 가장 바람직한 접근으로 가장 적절한 것은?',opts:['위험평가 결과와 유형분석, 내부감사·감독기관 지적사항 등을 종합적으로 반영해 정책·시스템·교육을 주기적으로 개선한다','한 번 구축한 시스템을 그대로 유지하는 것으로 충분하다','감독기관 지적사항은 무시해도 무방하다','유형분석 자료는 참고할 필요가 없다','내부감사 결과는 경영진에게 보고하지 않아도 된다'],a:0,exp:'위험평가, 유형분석, 감사·지적사항을 종합 반영해 정책·시스템·교육을 주기적으로 개선하는 것이 바람직한 고도화 접근입니다.'},
+{subject:'실무',diff:'중',type:'single',q:'다음 중 STR 제출과 관련해 \'신속성\'이 중요한 이유로 가장 적절한 것은?',opts:['의심거래 인지 후 지체 없이 보고해야 법집행기관의 신속한 대응과 추가 피해 방지에 기여할 수 있기 때문','신속성은 중요하지 않으며 연말에 일괄 제출해도 무방하기 때문','신속하게 제출하면 오히려 불리하기 때문','신속성 여부는 법적으로 규정되어 있지 않기 때문','신속성은 오탐을 늘리는 원인이기 때문'],a:0,exp:'신속한 보고는 법집행기관의 신속한 대응과 추가 피해 방지에 기여합니다.'},
+{subject:'실무',diff:'중',type:'single',q:'다음 중 카지노가 \'동일 그룹 계열 카지노 사업장 간\' 고객 정보를 공유하는 것이 자금세탁방지에 기여하는 방식으로 가장 적절한 것은?',opts:['계열 사업장 간 공유를 통해 특정 고객의 전체 이용패턴을 종합적으로 파악할 수 있다','정보 공유는 개인정보보호 위반이므로 절대 금지된다','계열사 간 공유는 자금세탁방지와 무관하다','각 사업장은 독립적으로만 운영해야 하며 정보 공유가 불필요하다','정보 공유는 마케팅 목적에만 활용해야 한다'],a:0,exp:'관련 법규(개인정보보호 등)를 준수하는 범위 내에서 이루어지는 계열사간 정보공유는 고객의 전체 이용패턴을 파악하는 데 기여할 수 있습니다.'},
+{subject:'실무',diff:'중',type:'single',q:'다음 중 자금세탁방지 관련 \'경영진 책임(Senior Management Accountability)\' 원칙이 강화되는 국제적 흐름의 취지로 가장 적절한 것은?',opts:['실무자 책임만으로는 체계의 실효성을 담보하기 어려워 경영진의 직접적 책임을 명확히 하려는 것','경영진 책임은 형식적 구호에 불과하기 때문','경영진 책임 강화는 실무에 아무 영향이 없기 때문','경영진 책임은 국제기준과 무관하기 때문','경영진 책임은 오직 감독기관에만 적용되기 때문'],a:0,exp:'실무자 책임만으로는 체계의 실효성 확보가 어려워 경영진의 직접적 책임을 명확히 하려는 취지입니다.'},
+{subject:'실무',diff:'중',type:'single',q:'다음 중 카지노 컴플라이언스 부서가 \'연간 계획\' 수립시 반영해야 하는 요소로 가장 적절한 것은?',opts:['전년도 위험평가·감사결과, 최신 유형분석, 교육계획, 시스템 고도화 계획 등','전년도 매출목표','경쟁사 광고비','직원 회식 일정','주차장 리모델링 계획'],a:0,exp:'전년도 위험평가·감사결과, 최신 유형분석, 교육계획, 시스템 고도화 계획이 연간 계획의 핵심 요소입니다.'},
+{subject:'실무',diff:'중',type:'single',q:'다음 중 \'자금세탁방지 관련 예산·인력 배정\'이 부족할 경우 발생할 수 있는 위험으로 가장 적절한 것은?',opts:['교육·시스템·인력 부족으로 이상거래 탐지 및 보고체계의 실효성이 저하될 위험','예산 부족은 실무에 아무 영향이 없다','예산이 적을수록 오히려 효율적이다','예산 배정은 감독기관이 대신 지원해준다','인력 부족은 자금세탁방지와 무관하다'],a:0,exp:'교육·시스템·인력 부족은 이상거래 탐지 및 보고체계의 실효성을 저하시키는 위험요인입니다.'},
+{subject:'실무',diff:'중',type:'single',q:'다음 중 카지노의 \'이상거래 사례 데이터베이스(내부 축적 사례)\'를 구축·활용하는 것이 유용한 이유로 가장 적절한 것은?',opts:['과거 유사 사례를 참고해 신속하고 일관된 판단을 내리는 데 도움이 되기 때문','사례 데이터베이스는 법적으로 보유가 금지되기 때문','과거 사례는 현재 판단에 참고할 가치가 없기 때문','데이터베이스 구축은 비용만 발생시킬 뿐 효과가 없기 때문','사례는 구두로만 전달하면 충분하기 때문'],a:0,exp:'과거 유사 사례를 참고하면 신속하고 일관된 판단에 도움이 됩니다.'},
+{subject:'실무',diff:'중',type:'single',q:'다음 중 카지노가 고객으로부터 \'기부\' 또는 \'후원\' 명목으로 대규모 자금을 받는 요청이 있을 경우 가장 적절한 대응은?',opts:['정상적인 카지노 사업범위를 벗어나는 요청의 성격을 검토하고, 필요시 자금출처 확인 등 CDD를 강화한다','기부·후원이라는 명목만으로 별다른 확인 없이 수령한다','기부는 항상 안전한 거래이므로 확인이 불필요하다','기부 관련 요청은 무조건 거절해야 한다','기부 관련 요청은 마케팅부서가 임의로 결정한다'],a:0,exp:'카지노 사업범위를 벗어나는 이례적 요청은 그 성격과 자금출처를 확인하는 등 CDD 강화가 필요한 신호가 될 수 있습니다.'},
+{subject:'실무',diff:'하',type:'single',q:'다음 중 자금세탁방지 관련 \'문서화된 위험수용기준(Risk Appetite)\'이 필요한 이유로 가장 적절한 것은?',opts:['조직이 감당할 수 있는 위험수준을 명확히 정해 일관된 의사결정 기준을 제공하기 위해','위험수용기준은 형식적 문서일 뿐 실익이 없기 때문','위험수용기준은 감독기관만 정할 수 있기 때문','위험수용기준은 매년 임의로 바뀌어도 무방하기 때문','위험수용기준은 마케팅 전략에만 활용되기 때문'],a:0,exp:'조직이 감당할 수 있는 위험수준을 명확히 정해 일관된 의사결정 기준을 제공하는 것이 위험수용기준의 목적입니다.'},
+{subject:'실무',diff:'중',type:'single',q:'다음 중 카지노가 \'고위험 고객과의 거래관계를 지속할지 여부\'를 결정할 때 종합적으로 고려해야 하는 사항으로 가장 적절한 것은?',opts:['고객의 위험도, 회사의 위험수용기준, 관련 법규상 의무 등을 종합적으로 검토한다','오직 고객의 예상 매출 기여도만 고려한다','오직 고객의 인지도만 고려한다','위험도는 고려할 필요가 없다','거래관계 지속 여부는 항상 자동으로 결정된다'],a:0,exp:'고객 위험도, 회사의 위험수용기준, 법규상 의무를 종합적으로 검토해 거래관계 지속 여부를 결정해야 합니다.'},
+{subject:'실무',diff:'최상',type:'single',q:'카지노 경영진이 특정 VIP 고객의 매출 기여도가 매우 높다는 이유로, 컴플라이언스 부서의 EDD 강화 권고를 무시하고 특별 예외를 지시했다. 이러한 상황에 대한 가장 적절한 평가는?',opts:['매출 기여도와 무관하게 자금세탁방지 의무는 준수되어야 하며, 경영진의 예외 지시는 법규 위반 및 제재 위험을 초래할 수 있다','경영진의 결정은 항상 우선하므로 문제가 없다','매출이 높은 고객은 자동으로 저위험으로 간주해야 한다','컴플라이언스 권고는 참고사항일 뿐 따르지 않아도 무방하다','이러한 지시는 카지노 운영의 정상적인 부분이다'],a:0,exp:'매출 기여도가 높다는 이유로 자금세탁방지 의무를 완화하는 것은 법규 위반 위험을 초래하며, 오히려 고위험 고객에 대한 EDD가 더욱 중요합니다.'},
+{subject:'실무',diff:'중',type:'single',q:'다음 중 \'보고책임자의 독립적 판단권\'을 보장하기 위해 조직상 고려해야 할 사항으로 가장 적절한 것은?',opts:['영업·매출 관련 부서로부터 독립된 보고체계와 인사평가 구조를 갖추도록 한다','보고책임자는 영업부서장의 지시를 우선 따라야 한다','보고책임자의 인사평가는 매출 실적으로만 이루어져야 한다','독립적 판단권은 필요하지 않다','보고책임자는 감독기관 소속이어야만 독립적일 수 있다'],a:0,exp:'영업 이해관계로부터 독립된 보고체계와 인사구조를 가져야 객관적인 STR 판단이 가능합니다.'},
+{subject:'실무',diff:'중',type:'single',q:'다음 중 자금세탁방지 관련 \'이슈 에스컬레이션(Escalation) 체계\'가 명확해야 하는 이유로 가장 적절한 것은?',opts:['중요한 이상행위나 정책 위반 사안이 적절한 시점에 상위 책임자에게 전달되어 신속한 의사결정이 가능하도록 하기 위해','에스컬레이션 체계는 불필요한 절차이기 때문','모든 사안은 최하위 직원이 종결해야 하기 때문','에스컬레이션은 감독기관만 활용하는 절차이기 때문','에스컬레이션 체계는 비용만 발생시키기 때문'],a:0,exp:'명확한 에스컬레이션 체계는 중요한 사안이 신속하게 상위 책임자에게 전달되어 적시에 의사결정이 이루어지도록 합니다.'},
+{subject:'실무',diff:'중',type:'single',q:'다음 중 카지노가 특정 국가 출신 고객군에 대해 강화된 모니터링을 적용하기로 결정할 때 근거로 삼아야 하는 것으로 가장 적절한 것은?',opts:['국가위험평가 및 관련 국제기구의 위험 평가 결과 등 객관적 근거','특정 국적에 대한 개인적 편견','특정 국적 고객의 외모','특정 국적 고객의 언어','특정 국적 고객의 종교'],a:0,exp:'국가별 위험 적용은 개인적 편견이 아니라 국가위험평가 등 객관적 근거에 기반해야 합니다.'},
+{subject:'실무',diff:'상',type:'single',q:'다음 중 국가·지역에 대한 위험평가를 근거로 한 조치와 \'차별적 대우\'를 구분하는 기준으로 가장 적절한 것은?',opts:['위험평가는 자금세탁·테러자금조달 관련 객관적 지표에 근거해야 하며, 국적·인종 등에 대한 편견에 기반한 조치는 허용되지 않는다','모든 외국인은 국적과 무관하게 동일하게 최고위험으로 취급해야 한다','차별적 대우와 위험기반 조치는 구분할 필요가 없다','위험평가는 개인적 인상만으로 충분하다','차별 여부는 고려할 필요가 없다'],a:0,exp:'위험기반 조치는 객관적 지표에 근거해야 하며, 국적·인종에 대한 편견에 기반한 차별적 대우와는 구분되어야 합니다.'},
+{subject:'실무',diff:'중',type:'single',q:'다음 중 카지노 실무자가 이상거래 여부를 판단할 때 \'단정적 결론\'보다 \'합리적 의심\'의 기준을 적용하는 이유로 가장 적절한 것은?',opts:['STR 제도의 취지가 확정적 증거가 아니라 합당한 의심에 근거한 조기 보고를 지향하기 때문','확정적 증거가 없으면 어떤 경우에도 보고할 수 없기 때문','합리적 의심 기준은 국제기준과 무관하기 때문','단정적 결론만이 보고의 유일한 기준이기 때문','합리적 의심은 실무에서 적용되지 않는 개념이기 때문'],a:0,exp:'STR 제도는 확정적 증거보다 합당한 근거에 따른 의심에 기반해 조기에 보고하도록 하는 취지를 가지고 있습니다.'},
+{subject:'실무',diff:'하',type:'single',q:'다음 중 카지노 종사자가 \'고객의 게임 실력\'과 \'자금세탁 의심 여부\'를 혼동하지 않아야 하는 이유로 가장 적절한 것은?',opts:['게임에서의 승패는 자금세탁 여부와 직접적 관련이 없으며, 판단은 거래패턴·자금출처 등 별도 기준에 따라야 하기 때문','게임을 잘하는 고객은 항상 의심해야 하기 때문','게임에서 지는 고객은 항상 안전하기 때문','게임 실력은 CDD의 핵심 판단기준이기 때문','게임 실력과 자금세탁은 동일한 개념이기 때문'],a:0,exp:'게임의 승패 자체가 자금세탁 여부를 결정하지 않으며, 판단은 거래패턴·자금출처 등 별도 기준에 따라야 합니다.'},
+{subject:'실무',diff:'중',type:'single',q:'다음 중 카지노가 \'고객 응대 매뉴얼\'과 \'자금세탁방지 내부정책\'을 상호 연계해 운영해야 하는 이유로 가장 적절한 것은?',opts:['현장 응대 과정에서 CDD·레드플래그 식별 등이 자연스럽게 이행되도록 하기 위해','두 문서는 서로 완전히 무관하게 별도로 운영해야 하기 때문','응대 매뉴얼에는 자금세탁방지 내용을 포함해서는 안 되기 때문','내부정책은 응대 매뉴얼과 통합될 수 없기 때문','현장 직원은 내부정책을 알 필요가 없기 때문'],a:0,exp:'응대 매뉴얼과 내부정책을 연계해야 현장에서 CDD·레드플래그 식별이 자연스럽게 이루어질 수 있습니다.'},
+{subject:'실무',diff:'중',type:'single',q:'다음 중 자금세탁방지 관련 \'지속적인 사후 모니터링(Post-STR Monitoring)\'이 필요한 이유로 가장 적절한 것은?',opts:['STR 제출 이후에도 해당 고객의 거래가 지속되는 경우 추가적인 의심 정황이 발생할 수 있어 계속 관찰이 필요하기 때문','STR 제출 후에는 더 이상 모니터링이 필요 없기 때문','STR 제출 후 고객과의 관계는 자동으로 종료되기 때문','사후 모니터링은 법적으로 금지되기 때문','사후 모니터링은 감독기관만 수행하는 절차이기 때문'],a:0,exp:'STR 제출 이후에도 거래가 계속되면 추가 의심 정황이 나타날 수 있어 지속적인 관찰이 필요합니다.'},
+{subject:'실무',diff:'상',type:'single',q:'다음 중 카지노가 자금세탁방지 관련 \'모범사례(Best Practice)\'를 도입할 때 유의해야 할 점으로 가장 적절한 것은?',opts:['해외·타사의 모범사례를 국내 법규 및 카지노의 실제 운영환경에 맞게 조정하여 적용해야 한다','모범사례는 그대로 복사해 적용하면 충분하다','모범사례는 국내법과 무관하게 우선 적용된다','모범사례 도입은 항상 불필요한 비용만 발생시킨다','모범사례는 감독기관이 강제로 지정해준다'],a:0,exp:'모범사례는 국내 법규 및 실제 운영환경에 맞게 조정해 적용해야 실효성을 가질 수 있습니다.'},
+{subject:'실무',diff:'최상',type:'single',q:'카지노 서베일런스 업무자가 이론(제도)과 실무를 연결해 이해해야 하는 이유로 가장 적절한 것은?',opts:['제도의 취지(예방·처벌·투명성)를 이해해야 실무상 CDD·STR·EDD 등 개별 절차의 목적과 판단기준을 올바르게 적용할 수 있기 때문','이론과 실무는 완전히 별개이므로 따로 암기하면 충분하다','실무 절차는 이론적 근거 없이 임의로 정해진 것이기 때문','시험에는 이론만 나오고 실무는 나오지 않기 때문','실무를 이해하면 이론은 몰라도 무방하기 때문'],a:0,exp:'제도의 취지를 이해해야 CDD·STR·EDD 등 실무 절차의 목적과 판단기준을 올바르게 적용할 수 있으며, TPAC는 제도와 실무를 함께 평가하는 시험이므로 두 영역의 연계 이해가 중요합니다.'}
+];
+
+let pool = [];
+let idx = 0;
+let score = 0;
+let scoreByDiff = {'하':0,'중':0,'상':0,'최상':0};
+let totalByDiff = {'하':0,'중':0,'상':0,'최상':0};
+let answered = false;
+let multiPicked = new Set();
+let currentDiff = 'all';
+let currentSubject = 'all';
+
+document.getElementById('filterRow').addEventListener('click',(e)=>{
+  const btn = e.target.closest('.filter-btn');
+  if(!btn) return;
+  document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  currentSubject = btn.dataset.f;
+});
+
+document.getElementById('cntSingle').textContent = QUESTIONS.filter(q=>q.type==='single').length;
+document.getElementById('cntMulti').textContent = QUESTIONS.filter(q=>q.type==='multi').length;
+document.getElementById('cntExtreme').textContent = QUESTIONS.filter(q=>q.diff==='최상').length;
+
+document.getElementById('startBtn').addEventListener('click', startQuiz);
+document.getElementById('nextBtn').addEventListener('click', nextQuestion);
+document.getElementById('confirmBtn').addEventListener('click', confirmMulti);
+document.getElementById('retryBtn').addEventListener('click', ()=>{
+  document.getElementById('result').style.display='none';
+  document.getElementById('setup').style.display='block';
+});
+
+function startQuiz(){
+  pool = QUESTIONS.filter(q=> currentSubject==='all' || q.subject===currentSubject);
+  idx = 0; score = 0;
+  scoreByDiff = {'하':0,'중':0,'상':0,'최상':0};
+  totalByDiff = {'하':0,'중':0,'상':0,'최상':0};
+  pool.forEach(q=>totalByDiff[q.diff]++);
+  document.getElementById('setup').style.display='none';
+  document.getElementById('result').style.display='none';
+  document.getElementById('quiz').style.display='block';
+  renderQuestion();
+}
+
+function renderQuestion(){
+  answered = false;
+  multiPicked = new Set();
+  const q = pool[idx];
+  document.getElementById('progText').textContent = `문제 ${idx+1} / ${pool.length}`;
+  document.getElementById('scoreText').textContent = `정답 ${score}`;
+  document.getElementById('progFill').style.width = `${(idx/pool.length)*100}%`;
+  document.getElementById('subjBadge').textContent = q.subject;
+  const diffBadge = document.getElementById('diffBadge');
+  diffBadge.textContent = q.diff;
+  diffBadge.className = 'badge diff-'+q.diff;
+  document.getElementById('typeBadge').textContent = q.type==='multi' ? '모두 고르시오' : '';
+  document.getElementById('qtext').textContent = q.q;
+
+  const optList = document.getElementById('optList');
+  optList.innerHTML = '';
+  q.opts.forEach((opt, i)=>{
+    const b = document.createElement('button');
+    b.className = 'opt';
+    b.innerHTML = `<span class="num">${i+1}</span><span>${opt}</span>`;
+    if(q.type==='single'){
+      b.addEventListener('click', ()=>selectSingle(i));
+    } else {
+      b.addEventListener('click', ()=>toggleMulti(i, b));
+    }
+    optList.appendChild(b);
+  });
+
+  document.getElementById('confirmBtn').style.display = q.type==='multi' ? 'block' : 'none';
+  document.getElementById('explain').style.display='none';
+  document.getElementById('nextBtn').style.display='none';
+}
+
+function selectSingle(i){
+  if(answered) return;
+  answered = true;
+  const q = pool[idx];
+  finalizeAnswer([i], q.a===i ? true : (i===q.a));
+  gradeAndShow([i]);
+}
+
+function toggleMulti(i, btn){
+  if(answered) return;
+  if(multiPicked.has(i)){ multiPicked.delete(i); btn.classList.remove('picked'); }
+  else { multiPicked.add(i); btn.classList.add('picked'); }
+}
+
+function confirmMulti(){
+  if(answered) return;
+  if(multiPicked.size===0) return;
+  answered = true;
+  gradeAndShow(Array.from(multiPicked));
+}
+
+function gradeAndShow(pickedArr){
+  const q = pool[idx];
+  const correctArr = Array.isArray(q.a) ? q.a : [q.a];
+  const pickedSet = new Set(pickedArr);
+  const correctSet = new Set(correctArr);
+  let isCorrect = pickedSet.size===correctSet.size && [...pickedSet].every(v=>correctSet.has(v));
+
+  const opts = document.querySelectorAll('.opt');
+  opts.forEach((el, j)=>{
+    el.classList.add('disabled');
+    el.classList.remove('picked');
+    if(correctSet.has(j)) el.classList.add('correct');
+    if(pickedSet.has(j) && !correctSet.has(j)) el.classList.add('wrong');
+    if(!correctSet.has(j) && !pickedSet.has(j)) el.classList.add('dim');
+  });
+
+  document.getElementById('confirmBtn').style.display='none';
+
+  if(isCorrect){
+    score++;
+    scoreByDiff[q.diff]++;
+  }
+  document.getElementById('scoreText').textContent = `정답 ${score}`;
+  document.getElementById('explainText').textContent = q.exp;
+  document.getElementById('explain').style.display='block';
+  document.getElementById('nextBtn').style.display='block';
+  document.getElementById('nextBtn').textContent = (idx===pool.length-1) ? '결과 보기' : '다음 문제';
+}
+
+function finalizeAnswer(){ /* reserved */ }
+
+function nextQuestion(){
+  idx++;
+  if(idx>=pool.length){ showResult(); } else { renderQuestion(); }
+}
+
+function showResult(){
+  document.getElementById('quiz').style.display='none';
+  document.getElementById('result').style.display='block';
+  document.getElementById('finalScore').textContent = `${score} / ${pool.length}`;
+  document.getElementById('finalPct').textContent = `정답률 ${Math.round(score/pool.length*100)}%`;
+  ['하','중','상','최상'].forEach(d=>{
+    document.getElementById('bd'+d).textContent = `${scoreByDiff[d]}/${totalByDiff[d]}`;
+  });
+}
+</script>
+</body>
+</html>
